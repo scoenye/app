@@ -26,8 +26,8 @@ from app.models import OrderItem
 
 class OrderItemForm(forms.ModelForm):
     """Custom form for the OrderItem inline"""
-    
-    meta = OrderItem._meta
+
+    meta    = OrderItem._meta
     
     # Setting "required" is superfluous if TabularInlineForm is used, but just in case that changes...
     discount = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'5'}),
@@ -44,3 +44,5 @@ class OrderItemForm(forms.ModelForm):
 
     class Meta:
         model = OrderItem
+        fields  = ["discount", "tax", "price_per_unit"]
+    
