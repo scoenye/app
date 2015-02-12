@@ -1,0 +1,50 @@
+/*
+ * @author: Sven Coenye
+ *
+ * Copyright (C) 2015  Sven Coenye
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/
+ */
+
+/* Style modifications for print media */
+BODY {font: bold 10pt Arial, Helvetica, sans; color: black}
+
+/* Hide decorations and navigation elements */
+DIV.PageHeading {display: none}
+
+.TxtCallout    {background-color: #eaeaea; border: 1px solid #696969; margin: 8px}
+.TxtCalloutAlt {background-color: #eaeaea; border: 1px solid #696969; margin: 8px; font-weight: bold}
+.LabelCallout  {background-color: #eaeaea; border: 1px solid #696969; margin: 8px; font-weight: bold}
+.DateCallout   {background-color: #eaeaea; border: 1px solid #696969; margin: 8px; text-align: right}
+.Portrait      {background-color: #eaeaea; border: 1px solid #696969; padding: 5px; margin: 3px}
+.update {font-family: verdana, arial, helvetica, sans}
+
+DD {margin-bottom: 0.50em}
+
+/* Page segments */
+DIV.MenuBlock {display: none}
+DIV.Content   {float: left; width: 100%}
+DIV.Panel50   {float: left; width: 50%}
+
+/* Content block container */
+DIV.ContentPane {margin-bottom: 1em; margin-right: 10px}
+DIV.PaneHeader {color: #fff; text-align: left; background: #7080a0 url(http://app.138mshr.local/static/app/images/pane_corner) no-repeat top right; padding: 2px 2px}
+DIV.PaneHeader H1 {margin: 0; font-weight: bold; text-align: center; text-decoration: underline}
+DIV.PaneLine {border: solid #7080A0; border-width: 1px 1px 1px 2px; color: #000; font-weight: normal; padding: 2px 2px; margin-bottom: 1em}
+DIV.PaneLine P {margin-top: 0; margin-bottom: 0.5em}
+
+/* Stop float */
+.EndFloat {clear: both}
+DIV.EndFloat {height: 0px}
+

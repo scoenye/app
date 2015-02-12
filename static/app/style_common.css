@@ -1,0 +1,60 @@
+/*
+ * @author: Sven Coenye
+ *
+ * Copyright (C) 2015  Sven Coenye
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/
+ */
+
+/* Style elements common to all media */
+BODY {font: bold 100% Arial, Helvetica, sans; text-decoration: none; background-color: #f8f8f8;}
+
+.TxtCallout    {background-color: #eaeaea; border: 1px solid #696969; margin: 2px; padding: 1px 5px}
+.TxtCalloutAlt {background-color: #bababa; border: 1px solid #696969; margin: 2px; padding: 1px 5px}
+.Portrait      {background-color: #eaeaea; border: 1px solid #696969; margin: 3px 0px; padding: 5px}
+.Heading       {text-align: center; font-weight: bold}
+
+/* Page segments */
+DIV.Navigation  {float: left; width: 20%}
+DIV.Content     {float: left; width: 80%}
+DIV.Column2     {float: left; width: 50%}
+
+DIV.Panel50     {display: inline-block; width: 50%; margin: 0}
+
+/* Page header */
+DIV.HeadingImage {float: left}
+SPAN.Breadcrumb {font-size: 65%}
+SPAN.UserID {float: right; font-size: 65%}
+ADDRESS {text-align: center; vertical-align: middle}
+
+/* Content block container */
+DIV.ContentPane {margin-bottom: 1em; margin-right: 10px}
+DIV.PaneHeader {color: #fff; text-align: left; background: #7080a0 url(http://app.138mshr.local/static/app/images/pane_corner) no-repeat top right; padding: 2px 2px}
+DIV.PaneHeader H1 {margin: 0; font-weight: bold; font-size: smaller}
+DIV.PaneLine {border: solid #7080A0; border-width: 1px 1px 1px 2px; color: #000; font-weight: normal; font-size: 80%; padding: 2px 2px; margin-bottom: 1em}
+DIV.PaneLine P {margin-top: 0; margin-bottom: 0.5em}
+DIV.PaneLine H2 {color: #660066; font-size: 1em; margin-bottom: 0.25em; margin-left: 0.25em}
+DIV.PaneLine UL {margin-top: 0.25em; margin-bottm: 0.5em}
+
+/* Table free event panel */
+DIV.EventLine {margin: 6px 0px}
+DIV.EventLine P {margin: 0.25em 0}
+
+/* Stop float */
+.EndFloat {clear: both}
+DIV.EndFloat {height: 0px}
+
+/* IE sillyness */
+TD FORM {display: inline}   /* default is block, but that blows up row height */
+TH FORM {display: inline}

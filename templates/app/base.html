@@ -1,0 +1,20 @@
+{% load staticfiles %}
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" media="screen, print" href="{% static 'app/style_common.css'  %}">
+	<link rel="stylesheet" type="text/css" media="print"         href="{% static 'app/style_printer.css' %}">
+	<title>App website</title>
+</head>
+
+<body>
+	<div class="PageHeading">
+  	</div>
+	
+	<div class="Content">
+	{% block content %}
+		<p>Something is missing here...</p>
+	{% endblock %}
+	</div>
+</body>
+</html>
