@@ -24,25 +24,25 @@ from django.forms.forms import pretty_name
 
 from app.models import OrderItem
 
-class OrderItemForm(forms.ModelForm):
-    """Custom form for the OrderItem inline"""
-
-    meta    = OrderItem._meta
-    
-    # Setting "required" is superfluous if TabularInlineForm is used, but just in case that changes...
-    discount = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'5'}),
-                                label = pretty_name(label_for_field('discount', OrderItem)),
-                                required = not meta.get_field('discount').blank)
-    
-    tax = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'5'}),
-                           label = pretty_name(label_for_field('tax', OrderItem)),
-                           required = not meta.get_field('tax').blank)
-    
-    price_per_unit = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'10'}),
-                                      label = pretty_name(label_for_field('price_per_unit', OrderItem)),
-                                      required = not meta.get_field('price_per_unit').blank)
-
-    class Meta:
-        model = OrderItem
-        fields  = ["discount", "tax", "price_per_unit"]
+#class OrderItemForm(forms.ModelForm):
+#    """Custom form for the OrderItem inline"""
+#
+#    meta    = OrderItem._meta
+#    
+#    # Setting "required" is superfluous if TabularInlineForm is used, but just in case that changes...
+#    discount = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'5'}),
+#                                label = pretty_name(label_for_field('discount', OrderItem)),
+#                                required = not meta.get_field('discount').blank)
+#    
+#    tax = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'5'}),
+#                           label = pretty_name(label_for_field('tax', OrderItem)),
+#                           required = not meta.get_field('tax').blank)
+#    
+#    price_per_unit = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'10'}),
+#                                      label = pretty_name(label_for_field('price_per_unit', OrderItem)),
+#                                      required = not meta.get_field('price_per_unit').blank)
+#
+#    class Meta:
+#        model = OrderItem
+#        fields  = ["discount", "tax", "price_per_unit"]
     
