@@ -23,19 +23,16 @@ from django.db import models
 
 
 class Caller(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     name = models.CharField(max_length=30)
     telephone = models.CharField(max_length=15, blank=True)
     active = models.NullBooleanField()
     location = models.CharField(max_length=30, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'caller'
 
 
 class Company(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     name = models.CharField(max_length=50)
     street = models.CharField(max_length=40, blank=True)
     city = models.CharField(max_length=20, blank=True)
@@ -43,7 +40,6 @@ class Company(models.Model):
     postcode = models.CharField(max_length=10, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'company'
 
 
@@ -58,16 +54,14 @@ class Consumable(models.Model):
     part_no = models.CharField(max_length=20, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'consumable'
 
 
 class ConsumableItemType(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True)  # AutoField?
     name = models.CharField(max_length=40)
 
     class Meta:
-        managed = False
         db_table = 'consumable_item_type'
 
 
@@ -80,19 +74,16 @@ class Contractor(models.Model):
     postcode = models.CharField(max_length=10, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'contractor'
 
 
 class CoverPeriod(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     contract = models.ForeignKey('MaintenanceContract', db_column='contract', blank=True, null=True)
     weekday = models.IntegerField()
     start_time = models.TimeField()
     end_time = models.TimeField()
 
     class Meta:
-        managed = False
         db_table = 'cover_period'
 
 
@@ -105,12 +96,11 @@ class Department(models.Model):
     end_of_life = models.NullBooleanField()
 
     class Meta:
-        managed = False
         db_table = 'department'
 
 
 class Dispensed(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True)  # AutoField?
     item = models.IntegerField(blank=True, null=True)
     place_date = models.DateTimeField()
     department = models.IntegerField(blank=True, null=True)
@@ -119,7 +109,6 @@ class Dispensed(models.Model):
     quantity = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'dispensed'
 
 
@@ -133,7 +122,6 @@ class Employee(models.Model):
     department = models.ForeignKey(Department, db_column='department', blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'employee'
 
 
@@ -152,7 +140,6 @@ class Hardware(models.Model):
     tag = models.IntegerField(unique=True, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'hardware'
 
 
@@ -162,12 +149,10 @@ class HardwareItemType(models.Model):
     consumer = models.NullBooleanField()
 
     class Meta:
-        managed = False
         db_table = 'hardware_item_type'
 
 
 class HelpdeskCall(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     caller = models.ForeignKey(Caller, db_column='caller', blank=True, null=True)
     call_time = models.DateTimeField()
     call_recorder = models.ForeignKey('Technician', db_column='call_recorder', blank=True, null=True, related_name='helpdeskcall_recorder')
@@ -179,32 +164,26 @@ class HelpdeskCall(models.Model):
     closing_tech = models.ForeignKey('Technician', db_column='closing_tech', blank=True, null=True, related_name='helpdeskcall_closer')
 
     class Meta:
-        managed = False
         db_table = 'helpdesk_call'
 
 
 class ItemType(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     name = models.CharField(max_length=40)
 
     class Meta:
-        managed = False
         db_table = 'item_type'
 
 
 class MaintenanceContract(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     code = models.CharField(max_length=4)
     contractor = models.ForeignKey(Contractor, db_column='contractor', blank=True, null=True)
     description = models.CharField(max_length=35, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'maintenance_contract'
 
 
 class MaterialOrder(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     order_id = models.CharField(max_length=15)
     order_date = models.DateField()
     to_exec_committee = models.DateField(blank=True, null=True)
@@ -216,12 +195,10 @@ class MaterialOrder(models.Model):
     supplier_ref = models.CharField(max_length=20, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'material_order'
 
 
 class OrderItem(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     mat_order = models.IntegerField(blank=True, null=True)
     completed = models.DateField(blank=True, null=True)
     department = models.IntegerField(blank=True, null=True)
@@ -229,7 +206,6 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'order_item'
 
 
@@ -243,7 +219,6 @@ class OrderItemConsumable(models.Model):
     item = models.ForeignKey(Consumable, db_column='item', blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'order_item_consumable'
 
 
@@ -260,7 +235,6 @@ class OrderItemMaterial(models.Model):
     item_type = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'order_item_material'
 
 
@@ -273,19 +247,16 @@ class Person(models.Model):
     first_name = models.CharField(max_length=20)
 
     class Meta:
-        managed = False
         db_table = 'person'
 
 
 class Placement(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     item = models.IntegerField(blank=True, null=True)
     place_date = models.DateTimeField()
     department = models.ForeignKey(Department, db_column='department', blank=True, null=True)
     location = models.CharField(max_length=50, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'placement'
 
 
@@ -299,12 +270,10 @@ class RepairTechnician(models.Model):
     company = models.ForeignKey(Company, db_column='company', blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'repair_technician'
 
 
 class Repaircall(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     helpdeskcall = models.ForeignKey(HelpdeskCall, db_column='helpdeskcall')
     call_tech = models.ForeignKey('Technician', db_column='call_tech', related_name='repaircall_caller')
     call_time = models.DateTimeField()
@@ -316,18 +285,15 @@ class Repaircall(models.Model):
     repair_tech = models.ForeignKey(RepairTechnician, db_column='repair_tech', blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'repaircall'
 
 
 class SerialNo(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     item = models.IntegerField(blank=True, null=True)
     serial_no = models.CharField(max_length=30)
     assign_date = models.DateField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'serial_no'
 
 
@@ -342,7 +308,6 @@ class Software(models.Model):
     version = models.CharField(max_length=15, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'software'
 
 
@@ -351,12 +316,10 @@ class SoftwareItemType(models.Model):
     name = models.CharField(max_length=40)
 
     class Meta:
-        managed = False
         db_table = 'software_item_type'
 
 
 class SupportItem(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     contract = models.ForeignKey(MaintenanceContract, db_column='contract', blank=True, null=True)
     description = models.CharField(max_length=30)
     producer = models.ForeignKey(Company, db_column='producer', blank=True, null=True)
@@ -365,7 +328,6 @@ class SupportItem(models.Model):
     comment = models.TextField(blank=True)
 
     class Meta:
-        managed = False
         db_table = 'support_item'
 
 
@@ -379,28 +341,23 @@ class Technician(models.Model):
     department = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'technician'
 
 
 class Weekday(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     day = models.CharField(max_length=10)
 
     class Meta:
-        managed = False
         db_table = 'weekday'
 
 
 class WorkDone(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
     call = models.ForeignKey(HelpdeskCall, db_column='call')
     technician = models.ForeignKey(Technician, db_column='technician')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'work_done'
 
 
