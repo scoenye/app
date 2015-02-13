@@ -403,129 +403,6 @@ class Technician(models.Model):
         db_table = 'technician'
 
 
-class VwActiveDesktops(models.Model):
-    tag = models.IntegerField(blank=True, null=True)
-    description = models.CharField(max_length=30, blank=True)
-    department = models.CharField(max_length=30, blank=True)
-    assignee = models.CharField(max_length=50, blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_active_desktops'
-
-
-class VwActiveLaptops(models.Model):
-    tag = models.IntegerField(blank=True, null=True)
-    description = models.CharField(max_length=30, blank=True)
-    department = models.CharField(max_length=30, blank=True)
-    assignee = models.CharField(max_length=50, blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_active_laptops'
-
-
-class VwConsumablesDelivered(models.Model):
-    item = models.IntegerField(blank=True, null=True)
-    quantity = models.BigIntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_consumables_delivered'
-
-
-class VwConsumablesDispensed(models.Model):
-    item = models.IntegerField(blank=True, null=True)
-    dispensed = models.BigIntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_consumables_dispensed'
-
-
-class VwConsumablesOnhand(models.Model):
-    id = models.IntegerField(blank=True, null=True)
-    on_hand = models.BigIntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_consumables_onhand'
-
-
-class VwFirstAssignedDept(models.Model):
-    item = models.IntegerField(blank=True, null=True)
-    department = models.IntegerField(blank=True, null=True)
-    department_name = models.TextField(blank=True)
-    location = models.CharField(max_length=50, blank=True)
-    place_date = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_first_assigned_dept'
-
-
-class VwInventory(models.Model):
-    tag = models.IntegerField(blank=True, null=True)
-    description = models.CharField(max_length=30, blank=True)
-    mfg = models.CharField(max_length=50, blank=True)
-    part_no = models.CharField(max_length=20, blank=True)
-    serial_no = models.CharField(max_length=30, blank=True)
-    item_type = models.CharField(max_length=40, blank=True)
-    department = models.CharField(max_length=30, blank=True)
-    campus = models.CharField(max_length=30, blank=True)
-    location = models.CharField(max_length=50, blank=True)
-    comment = models.TextField(blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_inventory'
-
-
-class VwLastAssignedDept(models.Model):
-    item = models.IntegerField(blank=True, null=True)
-    department = models.IntegerField(blank=True, null=True)
-    name = models.CharField(max_length=30, blank=True)
-    location = models.CharField(max_length=50, blank=True)
-    place_date = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_last_assigned_dept'
-
-
-class VwLastAssignedSerial(models.Model):
-    item = models.IntegerField(blank=True, null=True)
-    serial_no = models.CharField(max_length=30, blank=True)
-    assign_date = models.DateField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_last_assigned_serial'
-
-
-class VwSupportItem(models.Model):
-    id = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_support_item'
-
-
-class VwSupportedHardSoft(models.Model):
-    id = models.IntegerField(blank=True, null=True)
-    description = models.CharField(max_length=30, blank=True)
-    item_type = models.IntegerField(blank=True, null=True)
-    item_type_name = models.CharField(max_length=40, blank=True)
-    host_ver = models.CharField(max_length=-1, blank=True)
-    department = models.IntegerField(blank=True, null=True)
-    location = models.CharField(max_length=50, blank=True)
-    serial_no = models.CharField(max_length=30, blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vw_supported_hard_soft'
-
-
 class Weekday(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     day = models.CharField(max_length=10)
@@ -545,3 +422,128 @@ class WorkDone(models.Model):
     class Meta:
         managed = False
         db_table = 'work_done'
+
+
+# The support views - hide until the real tables are migrated
+#class VwActiveDesktops(models.Model):
+#    tag = models.IntegerField(blank=True, null=True)
+#    description = models.CharField(max_length=30, blank=True)
+#    department = models.CharField(max_length=30, blank=True)
+#    assignee = models.CharField(max_length=50, blank=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_active_desktops'
+
+
+#class VwActiveLaptops(models.Model):
+#    tag = models.IntegerField(blank=True, null=True)
+#    description = models.CharField(max_length=30, blank=True)
+#    department = models.CharField(max_length=30, blank=True)
+#    assignee = models.CharField(max_length=50, blank=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_active_laptops'
+
+
+#class VwConsumablesDelivered(models.Model):
+#    item = models.IntegerField(blank=True, null=True)
+#    quantity = models.BigIntegerField(blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_consumables_delivered'
+
+
+#class VwConsumablesDispensed(models.Model):
+#    item = models.IntegerField(blank=True, null=True)
+#    dispensed = models.BigIntegerField(blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_consumables_dispensed'
+
+
+#class VwConsumablesOnhand(models.Model):
+#    id = models.IntegerField(blank=True, null=True)
+#    on_hand = models.BigIntegerField(blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_consumables_onhand'
+
+
+#class VwFirstAssignedDept(models.Model):
+#    item = models.IntegerField(blank=True, null=True)
+#    department = models.IntegerField(blank=True, null=True)
+#    department_name = models.TextField(blank=True)
+#    location = models.CharField(max_length=50, blank=True)
+#    place_date = models.DateTimeField(blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_first_assigned_dept'
+
+
+#class VwInventory(models.Model):
+#    tag = models.IntegerField(blank=True, null=True)
+#    description = models.CharField(max_length=30, blank=True)
+#    mfg = models.CharField(max_length=50, blank=True)
+#    part_no = models.CharField(max_length=20, blank=True)
+#    serial_no = models.CharField(max_length=30, blank=True)
+#    item_type = models.CharField(max_length=40, blank=True)
+#    department = models.CharField(max_length=30, blank=True)
+#    campus = models.CharField(max_length=30, blank=True)
+#    location = models.CharField(max_length=50, blank=True)
+#    comment = models.TextField(blank=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_inventory'
+
+
+#class VwLastAssignedDept(models.Model):
+#    item = models.IntegerField(blank=True, null=True)
+#    department = models.IntegerField(blank=True, null=True)
+#    name = models.CharField(max_length=30, blank=True)
+#    location = models.CharField(max_length=50, blank=True)
+#    place_date = models.DateTimeField(blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_last_assigned_dept'
+
+
+#class VwLastAssignedSerial(models.Model):
+#    item = models.IntegerField(blank=True, null=True)
+#    serial_no = models.CharField(max_length=30, blank=True)
+#    assign_date = models.DateField(blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_last_assigned_serial'
+
+
+#class VwSupportItem(models.Model):
+#    id = models.IntegerField(blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_support_item'
+
+
+#class VwSupportedHardSoft(models.Model):
+#    id = models.IntegerField(blank=True, null=True)
+#    description = models.CharField(max_length=30, blank=True)
+#    item_type = models.IntegerField(blank=True, null=True)
+#    item_type_name = models.CharField(max_length=40, blank=True)
+#    host_ver = models.CharField(max_length=-1, blank=True)
+#    department = models.IntegerField(blank=True, null=True)
+#    location = models.CharField(max_length=50, blank=True)
+#    serial_no = models.CharField(max_length=30, blank=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'vw_supported_hard_soft'
+
