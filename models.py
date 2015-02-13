@@ -63,7 +63,7 @@ class Consumable(models.Model):
 
 
 class ConsumableItemType(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40)
 
     class Meta:
@@ -110,7 +110,7 @@ class Department(models.Model):
 
 
 class Dispensed(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     item = models.IntegerField(blank=True, null=True)
     place_date = models.DateTimeField()
     department = models.IntegerField(blank=True, null=True)
@@ -170,13 +170,13 @@ class HelpdeskCall(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     caller = models.ForeignKey(Caller, db_column='caller', blank=True, null=True)
     call_time = models.DateTimeField()
-    call_recorder = models.ForeignKey('Technician', db_column='call_recorder', blank=True, null=True)
+    call_recorder = models.ForeignKey('Technician', db_column='call_recorder', blank=True, null=True, related_name='helpdeskcall_recorder')
     problem_type = models.TextField(blank=True)
     item = models.ForeignKey('SupportItem', db_column='item')
-    assigned_tech = models.ForeignKey('Technician', db_column='assigned_tech', blank=True, null=True)
+    assigned_tech = models.ForeignKey('Technician', db_column='assigned_tech', blank=True, null=True, related_name='helpdeskcall_assignee')
     closing_time = models.DateTimeField(blank=True, null=True)
     closing_comment = models.TextField(blank=True)
-    closing_tech = models.ForeignKey('Technician', db_column='closing_tech', blank=True, null=True)
+    closing_tech = models.ForeignKey('Technician', db_column='closing_tech', blank=True, null=True, related_name='helpdeskcall_closer')
 
     class Meta:
         managed = False
@@ -220,26 +220,6 @@ class MaterialOrder(models.Model):
         db_table = 'material_order'
 
 
-class OldInventory(models.Model):
-    contract = models.IntegerField(blank=True, null=True)
-    description = models.CharField(max_length=30, blank=True)
-    producer = models.IntegerField(blank=True, null=True)
-    item_type = models.IntegerField(blank=True, null=True)
-    order_item = models.IntegerField(blank=True, null=True)
-    part_no = models.CharField(max_length=20, blank=True)
-    hostname = models.CharField(max_length=20, blank=True)
-    tag = models.IntegerField(blank=True, null=True)
-    place_date = models.DateField(blank=True, null=True)
-    location = models.CharField(max_length=50, blank=True)
-    department = models.IntegerField(blank=True, null=True)
-    purchased = models.DateField(blank=True, null=True)
-    serial_no = models.CharField(max_length=30, blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'old_inventory'
-
-
 class OrderItem(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     mat_order = models.IntegerField(blank=True, null=True)
@@ -254,7 +234,7 @@ class OrderItem(models.Model):
 
 
 class OrderItemConsumable(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     mat_order = models.IntegerField(blank=True, null=True)
     completed = models.DateField(blank=True, null=True)
     department = models.IntegerField(blank=True, null=True)
@@ -326,13 +306,13 @@ class RepairTechnician(models.Model):
 class Repaircall(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     helpdeskcall = models.ForeignKey(HelpdeskCall, db_column='helpdeskcall')
-    call_tech = models.ForeignKey('Technician', db_column='call_tech')
+    call_tech = models.ForeignKey('Technician', db_column='call_tech', related_name='repaircall_caller')
     call_time = models.DateTimeField()
     close_time = models.DateTimeField(blank=True, null=True)
     call_problem = models.TextField()
     call_reference = models.CharField(max_length=10, blank=True)
     close_comment = models.TextField(blank=True)
-    close_tech = models.ForeignKey('Technician', db_column='close_tech', blank=True, null=True)
+    close_tech = models.ForeignKey('Technician', db_column='close_tech', blank=True, null=True, related_name='repaircall_closer')
     repair_tech = models.ForeignKey(RepairTechnician, db_column='repair_tech', blank=True, null=True)
 
     class Meta:
