@@ -42,14 +42,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Consumable',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('contract', models.IntegerField(null=True, blank=True)),
-                ('description', models.CharField(max_length=30)),
-                ('item_type', models.IntegerField()),
-                ('order_item', models.IntegerField(null=True, blank=True)),
-                ('comment', models.TextField(blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('part_no', models.CharField(max_length=20, blank=True)),
-                ('producer', models.ForeignKey(db_column='producer', blank=True, to='app.Company', null=True)),
             ],
             options={
                 'db_table': 'consumable',
@@ -59,7 +53,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ConsumableItemType',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=40)),
             ],
             options={
@@ -70,12 +64,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Contractor',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
-                ('street', models.CharField(max_length=40, blank=True)),
-                ('city', models.CharField(max_length=20, blank=True)),
-                ('telephone', models.CharField(max_length=15, blank=True)),
-                ('postcode', models.CharField(max_length=10, blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('company', models.OneToOneField(to='app.Company')),
             ],
             options={
                 'db_table': 'contractor',
@@ -86,7 +76,6 @@ class Migration(migrations.Migration):
             name='CoverPeriod',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('weekday', models.IntegerField()),
                 ('start_time', models.TimeField()),
                 ('end_time', models.TimeField()),
             ],
@@ -98,12 +87,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Department',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('name', models.CharField(max_length=30)),
-                ('telephone', models.CharField(max_length=15, blank=True)),
-                ('active', models.NullBooleanField()),
-                ('location', models.CharField(max_length=30, blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('end_of_life', models.NullBooleanField()),
+                ('caller', models.OneToOneField(to='app.Caller')),
             ],
             options={
                 'db_table': 'department',
@@ -113,11 +99,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Dispensed',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('item', models.IntegerField(null=True, blank=True)),
-                ('place_date', models.DateTimeField()),
-                ('department', models.IntegerField(null=True, blank=True)),
-                ('location', models.CharField(max_length=50, blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('quantity', models.IntegerField(null=True, blank=True)),
             ],
             options={
@@ -128,13 +110,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Employee',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('name', models.CharField(max_length=30)),
-                ('telephone', models.CharField(max_length=15, blank=True)),
-                ('active', models.NullBooleanField()),
-                ('location', models.CharField(max_length=30, blank=True)),
-                ('first_name', models.CharField(max_length=20)),
-                ('department', models.ForeignKey(db_column='department', blank=True, to='app.Department', null=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('department', models.ForeignKey(blank=True, to='app.Department', null=True)),
             ],
             options={
                 'db_table': 'employee',
@@ -144,13 +121,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Hardware',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('contract', models.IntegerField(null=True, blank=True)),
-                ('description', models.CharField(max_length=30)),
-                ('producer', models.IntegerField(null=True, blank=True)),
-                ('item_type', models.IntegerField()),
-                ('order_item', models.IntegerField(null=True, blank=True)),
-                ('comment', models.TextField(blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('part_no', models.CharField(max_length=20, blank=True)),
                 ('hostname', models.CharField(max_length=20, blank=True)),
                 ('idms_name', models.CharField(max_length=8, blank=True)),
@@ -165,7 +136,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='HardwareItemType',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=40)),
                 ('consumer', models.NullBooleanField()),
             ],
@@ -205,7 +176,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=4)),
                 ('description', models.CharField(max_length=35, blank=True)),
-                ('contractor', models.ForeignKey(db_column='contractor', blank=True, to='app.Contractor', null=True)),
+                ('contractor', models.ForeignKey(blank=True, to='app.Contractor', null=True)),
             ],
             options={
                 'db_table': 'maintenance_contract',
@@ -216,7 +187,7 @@ class Migration(migrations.Migration):
             name='MaterialOrder',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('order_id', models.CharField(max_length=15)),
+                ('order', models.CharField(max_length=15)),
                 ('order_date', models.DateField()),
                 ('to_exec_committee', models.DateField(null=True, blank=True)),
                 ('to_supply_dept', models.DateField(null=True, blank=True)),
@@ -224,7 +195,7 @@ class Migration(migrations.Migration):
                 ('comment', models.TextField(blank=True)),
                 ('private_comment', models.TextField(blank=True)),
                 ('supplier_ref', models.CharField(max_length=20, blank=True)),
-                ('supplier', models.ForeignKey(to='app.Company', db_column='supplier')),
+                ('supplier', models.ForeignKey(to='app.Company')),
             ],
             options={
                 'db_table': 'material_order',
@@ -235,11 +206,11 @@ class Migration(migrations.Migration):
             name='OrderItem',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('mat_order', models.IntegerField(null=True, blank=True)),
                 ('completed', models.DateField(null=True, blank=True)),
-                ('department', models.IntegerField(null=True, blank=True)),
                 ('description', models.CharField(max_length=20, blank=True)),
                 ('quantity', models.IntegerField(null=True, blank=True)),
+                ('department', models.ForeignKey(to='app.Department')),
+                ('mat_order', models.ForeignKey(to='app.MaterialOrder')),
             ],
             options={
                 'db_table': 'order_item',
@@ -249,13 +220,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='OrderItemConsumable',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('mat_order', models.IntegerField(null=True, blank=True)),
-                ('completed', models.DateField(null=True, blank=True)),
-                ('department', models.IntegerField(null=True, blank=True)),
-                ('description', models.CharField(max_length=20, blank=True)),
-                ('quantity', models.IntegerField(null=True, blank=True)),
-                ('item', models.ForeignKey(db_column='item', blank=True, to='app.Consumable', null=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('item', models.ForeignKey(blank=True, to='app.Consumable', null=True)),
+                ('order_item', models.OneToOneField(to='app.OrderItem')),
             ],
             options={
                 'db_table': 'order_item_consumable',
@@ -265,16 +232,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='OrderItemMaterial',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('completed', models.DateField(null=True, blank=True)),
-                ('description', models.CharField(max_length=20, blank=True)),
-                ('quantity', models.IntegerField(null=True, blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('discount', models.FloatField(null=True, blank=True)),
                 ('tax', models.FloatField(null=True, blank=True)),
                 ('price_per_unit', models.FloatField(null=True, blank=True)),
                 ('item_type', models.IntegerField(null=True, blank=True)),
-                ('department', models.ForeignKey(db_column='department', blank=True, to='app.Department', null=True)),
-                ('mat_order', models.ForeignKey(db_column='mat_order', blank=True, to='app.MaterialOrder', null=True)),
+                ('order_item', models.OneToOneField(to='app.OrderItem')),
             ],
             options={
                 'db_table': 'order_item_material',
@@ -284,12 +247,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('name', models.CharField(max_length=30)),
-                ('telephone', models.CharField(max_length=15, blank=True)),
-                ('active', models.NullBooleanField()),
-                ('location', models.CharField(max_length=30, blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('first_name', models.CharField(max_length=20)),
+                ('caller', models.OneToOneField(to='app.Caller')),
             ],
             options={
                 'db_table': 'person',
@@ -300,10 +260,9 @@ class Migration(migrations.Migration):
             name='Placement',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('item', models.IntegerField(null=True, blank=True)),
                 ('place_date', models.DateTimeField()),
                 ('location', models.CharField(max_length=50, blank=True)),
-                ('department', models.ForeignKey(db_column='department', blank=True, to='app.Department', null=True)),
+                ('department', models.ForeignKey(blank=True, to='app.Department', null=True)),
             ],
             options={
                 'db_table': 'placement',
@@ -311,7 +270,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Repaircall',
+            name='RepairCall',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('call_time', models.DateTimeField()),
@@ -328,13 +287,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RepairTechnician',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('name', models.CharField(max_length=30)),
-                ('telephone', models.CharField(max_length=15, blank=True)),
-                ('active', models.NullBooleanField()),
-                ('location', models.CharField(max_length=30, blank=True)),
-                ('first_name', models.CharField(max_length=20)),
-                ('company', models.ForeignKey(db_column='company', blank=True, to='app.Company', null=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('company', models.ForeignKey(blank=True, to='app.Company', null=True)),
+                ('person', models.OneToOneField(to='app.Person')),
             ],
             options={
                 'db_table': 'repair_technician',
@@ -345,7 +300,6 @@ class Migration(migrations.Migration):
             name='SerialNo',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('item', models.IntegerField(null=True, blank=True)),
                 ('serial_no', models.CharField(max_length=30)),
                 ('assign_date', models.DateField(null=True, blank=True)),
             ],
@@ -357,13 +311,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Software',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('contract', models.IntegerField(null=True, blank=True)),
-                ('description', models.CharField(max_length=30)),
-                ('producer', models.IntegerField(null=True, blank=True)),
-                ('item_type', models.IntegerField()),
-                ('order_item', models.IntegerField(null=True, blank=True)),
-                ('comment', models.TextField(blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('version', models.CharField(max_length=15, blank=True)),
             ],
             options={
@@ -374,8 +322,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SoftwareItemType',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=40)),
+                ('item_type', models.OneToOneField(to='app.ItemType')),
             ],
             options={
                 'db_table': 'software_item_type',
@@ -388,10 +337,10 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('description', models.CharField(max_length=30)),
                 ('comment', models.TextField(blank=True)),
-                ('contract', models.ForeignKey(db_column='contract', blank=True, to='app.MaintenanceContract', null=True)),
-                ('item_type', models.ForeignKey(to='app.ItemType', db_column='item_type')),
-                ('order_item', models.ForeignKey(db_column='order_item', blank=True, to='app.OrderItemMaterial', null=True)),
-                ('producer', models.ForeignKey(db_column='producer', blank=True, to='app.Company', null=True)),
+                ('contract', models.ForeignKey(blank=True, to='app.MaintenanceContract', null=True)),
+                ('item_type', models.ForeignKey(to='app.ItemType')),
+                ('order_item', models.ForeignKey(blank=True, to='app.OrderItemMaterial', null=True)),
+                ('producer', models.ForeignKey(blank=True, to='app.Company', null=True)),
             ],
             options={
                 'db_table': 'support_item',
@@ -401,13 +350,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Technician',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True)),
-                ('name', models.CharField(max_length=30)),
-                ('telephone', models.CharField(max_length=15, blank=True)),
-                ('active', models.NullBooleanField()),
-                ('location', models.CharField(max_length=30, blank=True)),
-                ('first_name', models.CharField(max_length=20)),
-                ('department', models.IntegerField(null=True, blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('employee', models.OneToOneField(to='app.Employee')),
             ],
             options={
                 'db_table': 'technician',
@@ -431,8 +375,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('start_time', models.DateTimeField()),
                 ('end_time', models.DateTimeField(null=True, blank=True)),
-                ('call', models.ForeignKey(to='app.HelpdeskCall', db_column='call')),
-                ('technician', models.ForeignKey(to='app.Technician', db_column='technician')),
+                ('call', models.ForeignKey(to='app.HelpdeskCall')),
+                ('technician', models.ForeignKey(to='app.Technician')),
             ],
             options={
                 'db_table': 'work_done',
@@ -440,69 +384,129 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.AddField(
+            model_name='software',
+            name='support_item',
+            field=models.OneToOneField(to='app.SupportItem'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='serialno',
+            name='support_item',
+            field=models.ForeignKey(to='app.SupportItem'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
             model_name='repaircall',
             name='call_tech',
-            field=models.ForeignKey(related_name='repaircall_caller', db_column='call_tech', to='app.Technician'),
+            field=models.ForeignKey(related_name='repaircall_caller', to='app.Technician'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='repaircall',
             name='close_tech',
-            field=models.ForeignKey(related_name='repaircall_closer', db_column='close_tech', blank=True, to='app.Technician', null=True),
+            field=models.ForeignKey(related_name='repaircall_closer', blank=True, to='app.Technician', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='repaircall',
             name='helpdeskcall',
-            field=models.ForeignKey(to='app.HelpdeskCall', db_column='helpdeskcall'),
+            field=models.ForeignKey(to='app.HelpdeskCall'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='repaircall',
             name='repair_tech',
-            field=models.ForeignKey(db_column='repair_tech', blank=True, to='app.RepairTechnician', null=True),
+            field=models.ForeignKey(blank=True, to='app.RepairTechnician', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='placement',
+            name='support_item',
+            field=models.ForeignKey(to='app.SupportItem'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='helpdeskcall',
             name='assigned_tech',
-            field=models.ForeignKey(related_name='helpdeskcall_assignee', db_column='assigned_tech', blank=True, to='app.Technician', null=True),
+            field=models.ForeignKey(related_name='helpdeskcall_assignee', blank=True, to='app.Technician', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='helpdeskcall',
             name='call_recorder',
-            field=models.ForeignKey(related_name='helpdeskcall_recorder', db_column='call_recorder', blank=True, to='app.Technician', null=True),
+            field=models.ForeignKey(related_name='helpdeskcall_recorder', blank=True, to='app.Technician', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='helpdeskcall',
             name='caller',
-            field=models.ForeignKey(db_column='caller', blank=True, to='app.Caller', null=True),
+            field=models.ForeignKey(blank=True, to='app.Caller', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='helpdeskcall',
             name='closing_tech',
-            field=models.ForeignKey(related_name='helpdeskcall_closer', db_column='closing_tech', blank=True, to='app.Technician', null=True),
+            field=models.ForeignKey(related_name='helpdeskcall_closer', blank=True, to='app.Technician', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='helpdeskcall',
             name='item',
-            field=models.ForeignKey(to='app.SupportItem', db_column='item'),
+            field=models.ForeignKey(to='app.SupportItem'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='hardwareitemtype',
+            name='item_type',
+            field=models.OneToOneField(to='app.ItemType'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='hardware',
+            name='support_item',
+            field=models.OneToOneField(to='app.SupportItem'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='employee',
+            name='person',
+            field=models.OneToOneField(to='app.Person'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='dispensed',
             name='consumer',
-            field=models.ForeignKey(db_column='consumer', blank=True, to='app.Hardware', null=True),
+            field=models.ForeignKey(blank=True, to='app.Hardware', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='dispensed',
+            name='placement',
+            field=models.OneToOneField(to='app.Placement'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='coverperiod',
             name='contract',
-            field=models.ForeignKey(db_column='contract', blank=True, to='app.MaintenanceContract', null=True),
+            field=models.ForeignKey(blank=True, to='app.MaintenanceContract', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='coverperiod',
+            name='weekday',
+            field=models.ForeignKey(to='app.Weekday'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='consumableitemtype',
+            name='item_type',
+            field=models.OneToOneField(to='app.ItemType'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='consumable',
+            name='support_item',
+            field=models.OneToOneField(to='app.SupportItem'),
             preserve_default=True,
         ),
     ]
