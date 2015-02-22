@@ -19,31 +19,61 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 
 from django.contrib import admin
 
-#from admin_aid.forms import OrderItemForm
+# from admin_aid.forms import OrderItemForm
 from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter
+from navigation.admin import NavigableModelAdmin
 from app.models import *
 
+# Evil wart to solve the list_display mess
+# See https://code.djangoproject.com/ticket/5863
+def lookup(field_name):
+    def accessor(obj):
+        val = obj
+        for part in field_name.split('__'):
+            val = getattr(val, part)
+        return val
+    accessor.__name__ = field_name
+    return accessor
+
 # Register your models here.
-#class CompanyAdmin(admin.ModelAdmin):
-#    ordering = ('name',) 
-#    
-#admin.site.register(Company, CompanyAdmin)
+class CallerAdmin(NavigableModelAdmin):
+    nav_item = 'nav_caller'
+    ordering = ('name',)
+    
+admin.site.register(Caller, CallerAdmin)
 
-# Recycle the CompanyAdmin as long as the tables are identical
-#admin.site.register(Contractor, CompanyAdmin)
 
-#class DepartmentAdmin(admin.ModelAdmin):
-#    ordering = ('name',)
-#    list_filter = ['active']
-#    list_display = ['name', 'location']
-#    list_display_links = list_display
-#    
-#admin.site.register(Department, DepartmentAdmin)
+class CompanyAdmin(NavigableModelAdmin):
+    nav_item = 'nav_company'
+    ordering = ('name',) 
+    
+admin.site.register(Company, CompanyAdmin)
 
-#class EmployeeAdmin(admin.ModelAdmin):
-#    ordering = ('name', 'first_name')
-#    list_display = ['name', 'first_name']
-#    list_display_links = list_display
+
+class ContractorAdmin(NavigableModelAdmin):
+    nav_item = 'nav_contractor'
+    ordering = ('company__name',)
+
+admin.site.register(Contractor, ContractorAdmin)
+
+
+class DepartmentAdmin(NavigableModelAdmin):
+    nav_item = 'nav_department'
+
+    ordering = ('caller__name',)
+    list_filter = ['caller__active']
+    list_display = [lookup('caller__name'), lookup('caller__location')]
+    list_display_links = list_display
+    
+admin.site.register(Department, DepartmentAdmin)
+
+
+class EmployeeAdmin(NavigableModelAdmin):
+    nav_item = 'nav_employee'
+    
+    ordering = ('person__caller__name', 'person__first_name')
+    list_display = [lookup('person__caller__name'), lookup('person__first_name')]
+    list_display_links = list_display
 #    fieldsets = (
 #        (None, {
 #            'fields': (('first_name', 'name'), 'telephone', 'active')
@@ -52,36 +82,61 @@ from app.models import *
 #            'fields': ('department', 'location')
 #        }),
 #    )
-#
-#admin.site.register(Employee, EmployeeAdmin)
 
-#class WorkDoneInline(admin.TabularInline):
-#    model = WorkDone
-#    extra = 0
+admin.site.register(Employee, EmployeeAdmin)
 
-#class HelpdeskCallAdmin(admin.ModelAdmin):
-#    inlines = [WorkDoneInline]
-#    fieldsets = (
-#        (None, {
-#            'fields': (('caller', 'call_time', 'call_recorder'), 'problem_type', 'item')
-#        }),
-#        ('Techs', {
-#            'fields': ('assigned_tech', )
-#        }),
-#        ('Closing', {
-#            'classes': ('collapse', ),
-#            'fields': (('closing_time', 'closing_tech'), 'closing_comment')
-#        })
-#    )
 
-#admin.site.register(HelpdeskCall, HelpdeskCallAdmin)
+class WorkDoneInline(admin.TabularInline):
+    model = WorkDone
+    extra = 0
 
-#class ItemTypeAdmin(admin.ModelAdmin):
-#    ordering = ('name',)
+class HelpdeskCallAdmin(NavigableModelAdmin):
+    nav_item = 'nav_helpdesk'
+    inlines = [WorkDoneInline]
+    fieldsets = (
+        (None, {
+            'fields': (('caller', 'call_time', 'call_recorder'), 'problem_type', 'item')
+        }),
+        ('Techs', {
+            'fields': ('assigned_tech', )
+        }),
+        ('Closing', {
+            'classes': ('collapse', ),
+            'fields': (('closing_time', 'closing_tech'), 'closing_comment')
+        })
+    )
 
-#admin.site.register(HardwareItemType, ItemTypeAdmin)
+admin.site.register(HelpdeskCall, HelpdeskCallAdmin)
 
-#admin.site.register(SoftwareItemType, ItemTypeAdmin)
+
+class ItemTypeAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inventory_type'
+    ordering = ('name',)
+    
+admin.site.register(ItemType, ItemTypeAdmin)
+
+
+class SupportItemAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inventory'
+
+admin.site.register(SupportItem, SupportItemAdmin)
+
+
+class HardwareItemTypeAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inv_type_hardw'
+    
+    ordering = ('name',)
+
+admin.site.register(HardwareItemType, HardwareItemTypeAdmin)
+
+
+class SoftwareItemTypeAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inv_type_softw'
+    
+    ordering = ('name',)
+
+admin.site.register(SoftwareItemType, SoftwareItemTypeAdmin)
+
 
 #class HardwareSerialInline(admin.TabularInline):
 #    model = HardwareSerialNo
@@ -91,11 +146,13 @@ from app.models import *
 #    model = HardwarePlacement
 #    extra = 0
 
-#class HardwareAdmin(admin.ModelAdmin):
-#    ordering = ('item_type', 'part_no', 'description')
-#    list_display = ['tag', 'part_no', 'description']
-#    list_display_links = list_display
-#    list_filter = [HardwareItemTypeFilter]
+class HardwareAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inv_hardw'
+    
+    ordering = ('support_item__item_type', 'part_no', 'support_item__description')
+    list_display = ['tag', 'part_no', lookup('support_item__description')]
+    list_display_links = list_display
+    list_filter = [HardwareItemTypeFilter]
 #    inlines = [HardwareSerialInline, HardwarePlacementInline]
 #    fieldsets = (
 #        (None, {
@@ -106,8 +163,9 @@ from app.models import *
 #            'fields': (('contract', 'order_item'), )
 #        })
 #    )
-#    
-#admin.site.register(Hardware, HardwareAdmin)
+    
+admin.site.register(Hardware, HardwareAdmin)
+
 
 #class SoftwareSerialInline(admin.TabularInline):
 #    model = SoftwareSerialNo
@@ -117,11 +175,13 @@ from app.models import *
 #    model = SoftwarePlacement
 #    extra = 0
 
-#class SoftwareAdmin(admin.ModelAdmin):
-#    ordering = ('item_type', 'description', 'version')
-#    list_display = ['description', 'version']
-#    list_display_links = list_display
-#    list_filter = [SoftwareItemTypeFilter]
+class SoftwareAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inv_softw'
+
+    ordering = ('support_item__item_type', 'support_item__description', 'version')
+    list_display = [lookup('support_item__description'), 'version']
+    list_display_links = list_display
+    list_filter = [SoftwareItemTypeFilter]
 #    inlines = [SoftwareSerialInline, SoftwarePlacementInline]
 #    fieldsets = (
 #        (None, {
@@ -132,17 +192,20 @@ from app.models import *
 #            'fields': (('contract', 'order_item'), )
 #        })
 #    )
-#
-#admin.site.register(Software, SoftwareAdmin)
 
-#class CoverPeriodInline(admin.TabularInline):
-#    model = CoverPeriod
-#    extra = 0
+admin.site.register(Software, SoftwareAdmin)
+
+
+class CoverPeriodInline(admin.TabularInline):
+    model = CoverPeriod
+    extra = 0
     
-#class MaintenanceContractAdmin(admin.ModelAdmin):
-#    inlines = [CoverPeriodInline,]
-#    
-#admin.site.register(MaintenanceContract, MaintenanceContractAdmin)
+class MaintenanceContractAdmin(NavigableModelAdmin):
+    nav_item = 'nav_contract'
+    inlines = [CoverPeriodInline,]
+    
+admin.site.register(MaintenanceContract, MaintenanceContractAdmin)
+
 
 #class OrderItemInline(admin.TabularInline):
 #    form = OrderItemForm
@@ -157,58 +220,85 @@ from app.models import *
 #        }),
 #    )
 
-#class MaterialOrderAdmin(admin.ModelAdmin):
-#    date_hierarchy = 'order_date'
-#    ordering = ['-order_date']
-#    list_display = ['order_id', 'description']
-#    list_display_links = list_display
+class MaterialOrderAdmin(NavigableModelAdmin):
+    nav_item = 'nav_order'
+    
+    date_hierarchy = 'order_date'
+    ordering = ['-order_date']
+    list_display = ['order_no', 'description']
+    list_display_links = list_display
 #    inlines = [OrderItemInline]
-#    fieldsets = (
-#        (None, {
-#            'fields': (('order_id', 'supplier'), ('order_date', 'to_exec_committee', 'to_supply_dept'), 'description')
-#        }),
-#        ('Comments', {
-#            'classes': ('collapse',),
-#            'fields': ('comment', 'private_comment')
-#        }),
-#    )
-#
-#admin.site.register(MaterialOrder, MaterialOrderAdmin)
+    fieldsets = (
+        (None, {
+            'fields': (('order_id', 'supplier'), ('order_date', 'to_exec_committee', 'to_supply_dept'), 'description')
+        }),
+        ('Comments', {
+            'classes': ('collapse',),
+           'fields': ('comment', 'private_comment')
+        }),
+    )
 
-#class PersonAdmin(admin.ModelAdmin):
-#    ordering = ('name', 'first_name')
-#    list_display = ['name', 'first_name']
-#    list_display_links = list_display
+admin.site.register(MaterialOrder, MaterialOrderAdmin)
+
+
+class PersonAdmin(NavigableModelAdmin):
+    nav_item = 'nav_person'
+
+    ordering = ('caller__name', 'first_name')
+    list_display = [lookup('caller__name'), 'first_name']
+    list_display_links = list_display
+    fieldsets = (
+        (None, {
+            'fields': (('first_name', 'name'), 'telephone', 'active')
+        }),
+        ('Workplace', {
+            'fields': ('location',)
+        }),
+    )
+    
+admin.site.register(Person, PersonAdmin)
+
+
+class TechnicianAdmin(NavigableModelAdmin):
+    nav_item = 'nav_technician'
+
+    ordering = ('employee__person__caller__name', 'employee__person__first_name')
+    list_display = [lookup('employee__person__caller__name'), lookup('employee__person__first_name')]
+    list_display_links = list_display
 #    fieldsets = (
 #        (None, {
 #            'fields': (('first_name', 'name'), 'telephone', 'active')
 #        }),
 #        ('Workplace', {
-#            'fields': ('location',)
+#            'fields': ('department', 'location')
 #        }),
 #    )
-#    
-#admin.site.register(Person, PersonAdmin)
 
-#admin.site.register(Technician, EmployeeAdmin)
+admin.site.register(Technician, TechnicianAdmin)
 
-#class RepairCallAdmin(admin.ModelAdmin):
-#    fieldsets = (
-#        (None, {
-#            'fields': ('helpdeskcall', ('call_tech', 'call_time', 'call_reference'), 'call_problem', 'repair_tech')
-#        }),
-#        ('Closing', { 
-#            'classes': ('collapse', ),
-#            'fields': ('close_comment', ('close_time', 'close_tech'))
-#        })
-#    )
-#
-#admin.site.register(Repaircall, RepairCallAdmin)
 
-#class RepairTechnicianAdmin(admin.ModelAdmin):
-#    ordering = ('name', 'first_name')
-#    list_display = ['name', 'first_name']
-#    list_display_links = list_display
+class RepairCallAdmin(NavigableModelAdmin):
+    nav_item = 'nav_repaircall'
+
+    fieldsets = (
+        (None, {
+            'fields': ('helpdeskcall', ('call_tech', 'call_time', 'call_reference'), 'call_problem', 'repair_tech')
+        }),
+        ('Closing', { 
+            'classes': ('collapse', ),
+            'fields': ('close_comment', ('close_time', 'close_tech'))
+        })
+    )
+
+admin.site.register(RepairCall, RepairCallAdmin)
+
+
+class RepairTechnicianAdmin(NavigableModelAdmin):
+    nav_item = 'nav_repairtech'
+    
+    ordering = ('person__caller__name', 'person__first_name')
+    list_display = [lookup('person__caller__name'), lookup('person__first_name')]
+    list_display_links = list_display
 #    fieldsets = (
 #        (None, {
 #            'fields': (('first_name', 'name'), 'telephone', 'active')
@@ -217,5 +307,5 @@ from app.models import *
 #            'fields': ('company', 'location')
 #        }),
 #    )
-#
-#admin.site.register(RepairTechnician, RepairTechnicianAdmin)
+
+admin.site.register(RepairTechnician, RepairTechnicianAdmin)

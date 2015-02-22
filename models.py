@@ -53,7 +53,7 @@ class Consumable(models.Model):
 
 class ConsumableItemType(models.Model):
     item_type = models.OneToOneField("ItemType")
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40)  # TODO: Remove. See ItemType
 
     class Meta:
         db_table = 'consumable_item_type'
@@ -115,7 +115,7 @@ class Hardware(models.Model):
 
 class HardwareItemType(models.Model):
     item_type = models.OneToOneField("ItemType")
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40)  # TODO: Remove. See ItemType
     consumer = models.BooleanField(default=False)
 
     class Meta:
@@ -258,7 +258,7 @@ class Software(models.Model):
 
 class SoftwareItemType(models.Model):
     item_type = models.OneToOneField(ItemType)
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40)  # TODO: Remove. See ItemType
 
     class Meta:
         db_table = 'software_item_type'

@@ -18,7 +18,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 '''
 
 from django.views import generic
+from app import nav_tree
 
 # Create your views here.
 class IndexView(generic.TemplateView):
     template_name = 'app/index.html'
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['navigation'] = nav_tree['nav_root'].three_tier()
+        
+        return context
