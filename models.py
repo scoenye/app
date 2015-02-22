@@ -32,6 +32,40 @@ class Caller(models.Model):
         db_table = 'caller'
 
 
+class Department(Caller):
+    end_of_life = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'department'
+
+
+class Person(Caller):
+    first_name = models.CharField(max_length=20)
+
+    class Meta:
+        db_table = 'person'
+
+
+class RepairTechnician(Person):
+    company = models.ForeignKey('Company')
+
+    class Meta:
+        db_table = 'repair_technician'
+
+
+class Employee(Person):
+    department = models.ForeignKey(Department)
+
+    class Meta:
+        db_table = 'employee'
+
+
+class Technician(Employee):
+
+    class Meta:
+        db_table = 'technician'
+
+# ---------------------------------------------------------------------
 class Company(models.Model):
     name = models.CharField(max_length=50)
     street = models.CharField(max_length=40, null=True, blank=True)
@@ -43,28 +77,39 @@ class Company(models.Model):
         db_table = 'company'
 
 
-class Consumable(models.Model):
-    support_item = models.OneToOneField("SupportItem")
-    part_no = models.CharField(max_length=20, null=True, blank=True)
+class Contractor(Company):
 
     class Meta:
-        db_table = 'consumable'
+        db_table = 'contractor'
+
+# ---------------------------------------------------------------------
+class ItemType(models.Model):
+    name = models.CharField(max_length=40)
+
+    class Meta:
+        db_table = 'item_type'
 
 
-class ConsumableItemType(models.Model):
-    item_type = models.OneToOneField("ItemType")
+class ConsumableItemType(ItemType):
 
     class Meta:
         db_table = 'consumable_item_type'
 
 
-class Contractor(models.Model):
-    company = models.OneToOneField(Company)
+class HardwareItemType(ItemType):
+    consumer = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'contractor'
+        db_table = 'hardware_item_type'
 
 
+class SoftwareItemType(ItemType):
+
+    class Meta:
+        db_table = 'software_item_type'
+
+
+# ---------------------------------------------------------------------
 class CoverPeriod(models.Model):
     contract = models.ForeignKey('MaintenanceContract')
     weekday = models.ForeignKey("Weekday")
@@ -75,73 +120,6 @@ class CoverPeriod(models.Model):
         db_table = 'cover_period'
 
 
-class Department(models.Model):
-    caller = models.OneToOneField(Caller)
-    end_of_life = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = 'department'
-
-
-class Dispensed(models.Model):
-    placement = models.OneToOneField("Placement")
-    consumer = models.ForeignKey('Hardware')
-    quantity = models.IntegerField(default=1)
-
-    class Meta:
-        db_table = 'dispensed'
-
-
-class Employee(models.Model):
-    person = models.OneToOneField("Person")
-    department = models.ForeignKey(Department)
-
-    class Meta:
-        db_table = 'employee'
-
-
-class Hardware(models.Model):
-    support_item = models.OneToOneField("SupportItem")
-    part_no = models.CharField(max_length=20, blank=True, null=True)
-    hostname = models.CharField(max_length=20, blank=True, null=True)
-    idms_name = models.CharField(max_length=8, blank=True, null=True)
-    ip_address = models.IntegerField(blank=True, null=True)
-    tag = models.IntegerField(unique=True, blank=True, null=True)
-
-    class Meta:
-        db_table = 'hardware'
-
-
-class HardwareItemType(models.Model):
-    item_type = models.OneToOneField("ItemType")
-    consumer = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = 'hardware_item_type'
-
-
-class HelpdeskCall(models.Model):
-    caller = models.ForeignKey(Caller)
-    call_time = models.DateTimeField()
-    call_recorder = models.ForeignKey('Technician', related_name='helpdeskcall_recorder')
-    problem_type = models.TextField(blank=True, null=True)
-    item = models.ForeignKey('SupportItem')
-    assigned_tech = models.ForeignKey('Technician', blank=True, null=True, related_name='helpdeskcall_assignee')
-    closing_time = models.DateTimeField(blank=True, null=True)
-    closing_comment = models.TextField(blank=True, null=True)
-    closing_tech = models.ForeignKey('Technician', blank=True, null=True, related_name='helpdeskcall_closer')
-
-    class Meta:
-        db_table = 'helpdesk_call'
-
-
-class ItemType(models.Model):
-    name = models.CharField(max_length=40)
-
-    class Meta:
-        db_table = 'item_type'
-
-
 class MaintenanceContract(models.Model):
     code = models.CharField(max_length=4)
     contractor = models.ForeignKey(Contractor)
@@ -150,7 +128,7 @@ class MaintenanceContract(models.Model):
     class Meta:
         db_table = 'maintenance_contract'
 
-
+# ---------------------------------------------------------------------
 class MaterialOrder(models.Model):
     order_no = models.CharField(max_length=15)      # pg does not like 'order' as a field name
     order_date = models.DateField()
@@ -165,7 +143,7 @@ class MaterialOrder(models.Model):
     class Meta:
         db_table = 'material_order'
 
-
+# ---------------------------------------------------------------------
 class OrderItem(models.Model):
     mat_order = models.ForeignKey(MaterialOrder)
     completed = models.DateField(blank=True, null=True)
@@ -177,16 +155,14 @@ class OrderItem(models.Model):
         db_table = 'order_item'
 
 
-class OrderItemConsumable(models.Model):
-    order_item = models.OneToOneField(OrderItem)
-    item = models.ForeignKey(Consumable)
+class OrderItemConsumable(OrderItem):
+    item = models.ForeignKey('Consumable')
 
     class Meta:
         db_table = 'order_item_consumable'
 
 
-class OrderItemMaterial(models.Model):
-    order_item = models.OneToOneField(OrderItem)
+class OrderItemMaterial(OrderItem):
     discount = models.FloatField(blank=True, null=True)
     tax = models.FloatField(blank=True, null=True)
     price_per_unit = models.FloatField(blank=True, null=True)
@@ -195,15 +171,44 @@ class OrderItemMaterial(models.Model):
     class Meta:
         db_table = 'order_item_material'
 
-
-class Person(models.Model):
-    caller = models.OneToOneField(Caller)
-    first_name = models.CharField(max_length=20)
+# ---------------------------------------------------------------------
+class SupportItem(models.Model):
+    contract = models.ForeignKey(MaintenanceContract, blank=True, null=True)
+    description = models.CharField(max_length=30)
+    producer = models.ForeignKey(Company, default=-1)
+    item_type = models.ForeignKey(ItemType)
+    order_item = models.ForeignKey(OrderItemMaterial, default=-1)
+    comment = models.TextField(null=True, blank=True)
 
     class Meta:
-        db_table = 'person'
+        db_table = 'support_item'
 
 
+class Consumable(SupportItem):
+    part_no = models.CharField(max_length=20, null=True, blank=True)
+
+    class Meta:
+        db_table = 'consumable'
+
+
+class Hardware(SupportItem):
+    part_no = models.CharField(max_length=20, blank=True, null=True)
+    hostname = models.CharField(max_length=20, blank=True, null=True)
+    idms_name = models.CharField(max_length=8, blank=True, null=True)
+    ip_address = models.IntegerField(blank=True, null=True)
+    tag = models.IntegerField(unique=True, blank=True, null=True)
+
+    class Meta:
+        db_table = 'hardware'
+
+
+class Software(SupportItem):
+    version = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        db_table = 'software'
+
+# ---------------------------------------------------------------------
 class Placement(models.Model):
     support_item = models.ForeignKey("SupportItem")
     place_date = models.DateTimeField()
@@ -214,14 +219,30 @@ class Placement(models.Model):
         db_table = 'placement'
 
 
-class RepairTechnician(models.Model):
-    person = models.OneToOneField(Person)
-    company = models.ForeignKey(Company)
+class Dispensed(Placement):
+    consumer = models.ForeignKey('Hardware')
+    quantity = models.IntegerField(default=1)
 
     class Meta:
-        db_table = 'repair_technician'
+        db_table = 'dispensed'
 
 
+# ---------------------------------------------------------------------
+class HelpdeskCall(models.Model):
+    caller = models.ForeignKey(Caller)
+    call_time = models.DateTimeField()
+    call_recorder = models.ForeignKey('Technician', related_name='helpdeskcall_recorder')
+    problem_type = models.TextField(blank=True, null=True)
+    item = models.ForeignKey('SupportItem')
+    assigned_tech = models.ForeignKey('Technician', blank=True, null=True, related_name='helpdeskcall_assignee')
+    closing_time = models.DateTimeField(blank=True, null=True)
+    closing_comment = models.TextField(blank=True, null=True)
+    closing_tech = models.ForeignKey('Technician', blank=True, null=True, related_name='helpdeskcall_closer')
+
+    class Meta:
+        db_table = 'helpdesk_call'
+
+# ---------------------------------------------------------------------
 class RepairCall(models.Model):
     helpdeskcall = models.ForeignKey(HelpdeskCall)
     call_tech = models.ForeignKey('Technician', related_name='repaircall_caller')
@@ -244,40 +265,6 @@ class SerialNo(models.Model):
 
     class Meta:
         db_table = 'serial_no'
-
-
-class Software(models.Model):
-    support_item = models.OneToOneField("SupportItem")
-    version = models.CharField(max_length=15, blank=True, null=True)
-
-    class Meta:
-        db_table = 'software'
-
-
-class SoftwareItemType(models.Model):
-    item_type = models.OneToOneField(ItemType)
-
-    class Meta:
-        db_table = 'software_item_type'
-
-
-class SupportItem(models.Model):
-    contract = models.ForeignKey(MaintenanceContract, blank=True, null=True)
-    description = models.CharField(max_length=30)
-    producer = models.ForeignKey(Company, default=-1)
-    item_type = models.ForeignKey(ItemType)
-    order_item = models.ForeignKey(OrderItemMaterial, default=-1)
-    comment = models.TextField(null=True, blank=True)
-
-    class Meta:
-        db_table = 'support_item'
-
-
-class Technician(models.Model):
-    employee = models.OneToOneField(Employee)
-
-    class Meta:
-        db_table = 'technician'
 
 
 class Weekday(models.Model):

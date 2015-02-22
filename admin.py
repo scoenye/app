@@ -61,7 +61,7 @@ class DepartmentAdmin(NavigableModelAdmin):
     nav_item = 'nav_department'
 
     ordering = ('caller__name',)
-    list_filter = ['caller__active']
+    list_filter = ['active']
     list_display = [lookup('caller__name'), lookup('caller__location')]
     list_display_links = list_display
     
