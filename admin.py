@@ -24,17 +24,6 @@ from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter
 from navigation.admin import NavigableModelAdmin
 from app.models import *
 
-# Evil wart to solve the list_display mess
-# See https://code.djangoproject.com/ticket/5863
-def lookup(field_name):
-    def accessor(obj):
-        val = obj
-        for part in field_name.split('__'):
-            val = getattr(val, part)
-        return val
-    accessor.__name__ = field_name
-    return accessor
-
 # Register your models here.
 class CallerAdmin(NavigableModelAdmin):
     nav_item = 'nav_caller'

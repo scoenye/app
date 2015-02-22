@@ -31,6 +31,11 @@ class Caller(models.Model):
     class Meta:
         db_table = 'caller'
 
+    def __unicode__(self):
+        if self.location is not None:
+            return self.name + ' - ' + self.location
+        else:
+            return self.name
 
 class Department(Caller):
     end_of_life = models.BooleanField(default=False)
@@ -45,6 +50,8 @@ class Person(Caller):
     class Meta:
         db_table = 'person'
 
+    def __unicode__(self):
+        return self.name
 
 class RepairTechnician(Person):
     company = models.ForeignKey('Company')
@@ -75,7 +82,10 @@ class Company(models.Model):
 
     class Meta:
         db_table = 'company'
+        verbose_name_plural = 'companies'
 
+    def __unicode__(self):
+        return self.name
 
 class Contractor(Company):
 
@@ -89,6 +99,8 @@ class ItemType(models.Model):
     class Meta:
         db_table = 'item_type'
 
+    def __unicode__(self):
+        return self.name
 
 class ConsumableItemType(ItemType):
 
@@ -128,6 +140,9 @@ class MaintenanceContract(models.Model):
     class Meta:
         db_table = 'maintenance_contract'
 
+    def __unicode__(self):
+        return self.description
+
 # ---------------------------------------------------------------------
 class MaterialOrder(models.Model):
     order_no = models.CharField(max_length=15)      # pg does not like 'order' as a field name
@@ -143,6 +158,9 @@ class MaterialOrder(models.Model):
     class Meta:
         db_table = 'material_order'
 
+    def __unicode__(self):
+        return self.description
+
 # ---------------------------------------------------------------------
 class OrderItem(models.Model):
     mat_order = models.ForeignKey(MaterialOrder)
@@ -154,6 +172,8 @@ class OrderItem(models.Model):
     class Meta:
         db_table = 'order_item'
 
+    def __unicode__(self):
+        return self.description
 
 class OrderItemConsumable(OrderItem):
     item = models.ForeignKey('Consumable')
@@ -183,6 +203,8 @@ class SupportItem(models.Model):
     class Meta:
         db_table = 'support_item'
 
+    def __unicode__(self):
+        return self.description
 
 class Consumable(SupportItem):
     part_no = models.CharField(max_length=20, null=True, blank=True)
@@ -190,23 +212,23 @@ class Consumable(SupportItem):
     class Meta:
         db_table = 'consumable'
 
-
 class Hardware(SupportItem):
     part_no = models.CharField(max_length=20, blank=True, null=True)
     hostname = models.CharField(max_length=20, blank=True, null=True)
     idms_name = models.CharField(max_length=8, blank=True, null=True)
-    ip_address = models.IntegerField(blank=True, null=True)
+    ip_address = models.IntegerField(verbose_name='IP address', blank=True, null=True)
     tag = models.IntegerField(unique=True, blank=True, null=True)
 
     class Meta:
         db_table = 'hardware'
-
+        verbose_name_plural = 'hardware'
 
 class Software(SupportItem):
     version = models.CharField(max_length=15, blank=True, null=True)
 
     class Meta:
         db_table = 'software'
+        verbose_name_plural = 'software'
 
 # ---------------------------------------------------------------------
 class Placement(models.Model):
@@ -218,6 +240,8 @@ class Placement(models.Model):
     class Meta:
         db_table = 'placement'
 
+    def __unicode__(self):
+        return self.location
 
 class Dispensed(Placement):
     consumer = models.ForeignKey('Hardware')
@@ -242,6 +266,9 @@ class HelpdeskCall(models.Model):
     class Meta:
         db_table = 'helpdesk_call'
 
+    def __unicode__(self):
+        return self.problem_type
+
 # ---------------------------------------------------------------------
 class RepairCall(models.Model):
     helpdeskcall = models.ForeignKey(HelpdeskCall)
@@ -256,6 +283,10 @@ class RepairCall(models.Model):
 
     class Meta:
         db_table = 'repaircall'
+        verbose_name_plural = "repair calls"
+    
+    def __unicode__(self):
+        return self.call_problem
 
 
 class SerialNo(models.Model):
@@ -266,6 +297,8 @@ class SerialNo(models.Model):
     class Meta:
         db_table = 'serial_no'
 
+    def __unicode__(self):
+        return self.serial_no
 
 class Weekday(models.Model):
     day = models.CharField(max_length=10)
@@ -282,6 +315,7 @@ class WorkDone(models.Model):
 
     class Meta:
         db_table = 'work_done'
+        verbose_name_plural = 'work done'
 
 
 # The support views - hide until the real tables are migrated
