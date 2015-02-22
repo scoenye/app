@@ -4,11 +4,24 @@
 <head>
 	<link rel="stylesheet" type="text/css" media="screen, print" href="{% static 'app/style_common.css'  %}">
 	<link rel="stylesheet" type="text/css" media="print"         href="{% static 'app/style_printer.css' %}">
-	<title>App website</title>
+	<title>{% block title %}App website{% endblock %}</title>
 </head>
 
 <body>
 	<div class="PageHeading">
+		<div class="Navigation">
+			{% for tier in navigation %}
+				<div class="NavigationTier">
+				{% for item in tier %}
+					{% if item.selected %}
+						<span>{{ item.name }}</span>
+					{% else %}
+						<span><a href="{% url item.url %}">{{ item.name }}</a></span>
+					{% endif %}
+				{% endfor %}
+				</div>
+			{% endfor %}
+		</div>
   	</div>
 	
 	<div class="Content">
