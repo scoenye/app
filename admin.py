@@ -125,7 +125,7 @@ admin.site.register(SupportItem, SupportItemAdmin)
 class HardwareItemTypeAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_type_hardw'
     
-    ordering = ('name',)
+    ordering = ('item_type__name',)
 
 admin.site.register(HardwareItemType, HardwareItemTypeAdmin)
 
@@ -133,7 +133,7 @@ admin.site.register(HardwareItemType, HardwareItemTypeAdmin)
 class SoftwareItemTypeAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_type_softw'
     
-    ordering = ('name',)
+    ordering = ('item_type__name',)
 
 admin.site.register(SoftwareItemType, SoftwareItemTypeAdmin)
 
