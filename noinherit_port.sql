@@ -40,3 +40,18 @@ insert into helpdesk_call(caller_id, call_time, call_recorder_id, problem_type, 
 insert into repaircall(id, helpdeskcall_id, call_tech_id, call_time, close_time, call_problem, call_reference, close_comment, close_tech_id, repair_tech_id) select id, helpdeskcall, call_tech, call_time, close_time, call_problem, call_reference, close_comment, close_tech, repair_tech from app_orig.repaircall;
 insert into serial_no(id, support_item_id, serial_no, assign_date) select id, item, serial_no, assign_date from app_orig.serial_no;
 insert into work_done(id, start_time, end_time, call_id, technician_id) select id, start_time, end_time, call, technician from app_orig.work_done;
+
+select setval('caller_id_seq', max(id)) from caller;
+select setval('company_id_seq', max(id)) from company;
+select setval('cover_period_id_seq', max(id)) from cover_period;
+select setval('helpdesk_call_id_seq', max(id)) from helpdesk_call;
+select setval('item_type_id_seq', max(id)) from item_type;
+select setval('maintenance_contract_id_seq', max(id)) from maintenance_contract;
+select setval('material_order_id_seq', max(id)) from material_order;
+select setval('order_item_id_seq', max(id)) from order_item;
+select setval('placement_id_seq', max(id)) from placement;
+select setval('repaircall_id_seq', max(id)) from repaircall;
+select setval('serial_no_id_seq', max(id)) from serial_no;
+select setval('support_item_id_seq', max(id)) from support_item;
+select setval('weekday_id_seq', max(id)) from weekday;
+select setval('work_done_id_seq', max(id)) from work_done;

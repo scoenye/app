@@ -27,7 +27,11 @@ from app.models import *
 # Register your models here.
 class CallerAdmin(NavigableModelAdmin):
     nav_item = 'nav_caller'
+
     ordering = ('name',)
+    list_filter = ['active']
+    list_display = ['name', 'location']
+    list_display_links = list_display
     
 admin.site.register(Caller, CallerAdmin)
 
@@ -47,8 +51,10 @@ class PersonAdmin(NavigableModelAdmin):
     nav_item = 'nav_person'
 
     ordering = ('name', 'first_name')
+    list_filter = ['active']
     list_display = ['name', 'first_name']
     list_display_links = list_display
+
     fieldsets = (
         (None, {
             'fields': (('first_name', 'name'), 'telephone', 'active')
@@ -65,8 +71,10 @@ class RepairTechnicianAdmin(NavigableModelAdmin):
     nav_item = 'nav_repairtech'
     
     ordering = ('name', 'first_name')
+    list_filter = ['active']
     list_display = ['name', 'first_name']
     list_display_links = list_display
+
     fieldsets = (
         (None, {
             'fields': (('first_name', 'name'), 'telephone', 'active')
@@ -83,8 +91,10 @@ class EmployeeAdmin(NavigableModelAdmin):
     nav_item = 'nav_employee'
     
     ordering = ('name', 'first_name')
+    list_filter = ['active']
     list_display = ['name', 'first_name']
     list_display_links = list_display
+
     fieldsets = (
         (None, {
             'fields': (('first_name', 'name'), 'telephone', 'active')
@@ -101,8 +111,10 @@ class TechnicianAdmin(NavigableModelAdmin):
     nav_item = 'nav_technician'
 
     ordering = ('name', 'first_name')
+    list_filter = ['active']
     list_display = ['name', 'first_name']
     list_display_links = list_display
+
     fieldsets = (
         (None, {
             'fields': (('first_name', 'name'), 'telephone', 'active')
