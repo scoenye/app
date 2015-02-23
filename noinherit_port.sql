@@ -2,6 +2,9 @@
 update app_orig.order_item set department=-1 where department is null;
 update app_orig.order_item_material set item_type = -1 where item_type is null;
 update app_orig.placement set department = -1 where department is null;
+update app_orig.order_item set description = 'Unknown' where id = -1;
+update app_orig.order_item set description = 'Unassigned' where id = 0;
+
 
 insert into caller(id, name, telephone, active, location) select id, name, telephone, active, location from app_orig.caller;
 insert into department(caller_ptr_id, end_of_life) select id, end_of_life from app_orig.department;
