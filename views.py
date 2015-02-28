@@ -30,3 +30,21 @@ class IndexView(generic.TemplateView):
         context['navigation'] = nav_tree['nav_root'].three_tier()
         
         return context
+
+class InventoryTypesIndex(generic.TemplateView):
+    template_name = 'app/inventory_types.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(InventoryTypesIndex, self).get_context_data(**kwargs)
+        context['navigation'] = nav_tree['nav_inventory_type'].three_tier()
+        
+        return context
+
+class InventoryIndex(generic.TemplateView):
+    template_name = 'app/inventory.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(InventoryIndex, self).get_context_data(**kwargs)
+        context['navigation'] = nav_tree['nav_inventory'].three_tier()
+        
+        return context

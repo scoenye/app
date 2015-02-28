@@ -22,5 +22,7 @@ from django.conf.urls import patterns, url
 from app import views
 
 urlpatterns = patterns('', 
-    url(r'^$', views.IndexView.as_view(), name = 'index'),
+    url(r'^$',                views.IndexView.as_view(),           name = 'index'),
+    url(r'^inventory_types$', views.InventoryTypesIndex.as_view(), name = 'inventory_types_index'),
+    url(r'^inventory$',       views.InventoryIndex.as_view(),      name = 'inventory_index')
 )

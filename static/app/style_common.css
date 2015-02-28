@@ -26,7 +26,7 @@ BODY {font: bold 100% Arial, Helvetica, sans; text-decoration: none; background-
 .Heading       {text-align: center; font-weight: bold}
 
 /* Page segments */
-DIV.Navigation  {float: left; width: 20%}
+DIV.Navigation  {}
 DIV.Content     {float: left; width: 80%}
 DIV.Column2     {float: left; width: 50%}
 
