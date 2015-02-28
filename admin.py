@@ -193,22 +193,24 @@ class SupportItemAdmin(NavigableModelAdmin):
 admin.site.register(SupportItem, SupportItemAdmin)
 
 
-#class HardwareSerialInline(admin.TabularInline):
-#    model = HardwareSerialNo
-#    extra = 0
+class SerialInline(admin.TabularInline):
+    model = SerialNo
+    ordering = ['-assign_date']
+    extra = 0
 
-#class HardwarePlacementInline(admin.TabularInline):
-#    model = HardwarePlacement
-#    extra = 0
+class PlacementInline(admin.TabularInline):
+    model = Placement
+    ordering = ['-place_date']
+    extra = 0
 
 class HardwareAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_hardw'
-    
+
     ordering = ('item_type', 'part_no', 'description')
     list_display = ['tag', 'part_no', 'description']
     list_display_links = list_display
     list_filter = [HardwareItemTypeFilter]
-#    inlines = [HardwareSerialInline, HardwarePlacementInline]
+    inlines = [SerialInline, PlacementInline]
     fieldsets = (
         (None, {
             'fields': (('tag', 'description'), ('producer', 'part_no'), 'item_type', 'comment', ('hostname', 'ip_address'))
@@ -222,14 +224,6 @@ class HardwareAdmin(NavigableModelAdmin):
 admin.site.register(Hardware, HardwareAdmin)
 
 
-#class SoftwareSerialInline(admin.TabularInline):
-#    model = SoftwareSerialNo
-#    extra = 0
-
-#class SoftwarePlacementInline(admin.TabularInline):
-#    model = SoftwarePlacement
-#    extra = 0
-
 class SoftwareAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_softw'
 
@@ -237,7 +231,8 @@ class SoftwareAdmin(NavigableModelAdmin):
     list_display = ['description', 'version']
     list_display_links = list_display
     list_filter = [SoftwareItemTypeFilter]
-#    inlines = [SoftwareSerialInline, SoftwarePlacementInline]
+    inlines = [SerialInline, PlacementInline]
+
     fieldsets = (
         (None, {
             'fields': ('description', ('producer', 'item_type'), 'comment')
