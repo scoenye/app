@@ -36,6 +36,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'company',
+                'verbose_name_plural': 'companies',
             },
             bases=(models.Model,),
         ),
@@ -227,6 +228,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'dispensed',
+                'verbose_name_plural': 'dispensed',
             },
             bases=('app.placement',),
         ),
@@ -242,6 +244,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'repaircall',
+                'verbose_name_plural': 'repair calls',
             },
             bases=(models.Model,),
         ),
@@ -295,9 +298,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('supportitem_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='app.SupportItem')),
                 ('version', models.CharField(max_length=15, null=True, blank=True)),
+                ('item_type', models.ForeignKey(to='app.SoftwareItemType')),
             ],
             options={
                 'db_table': 'software',
+                'verbose_name_plural': 'software',
             },
             bases=('app.supportitem',),
         ),
@@ -308,11 +313,13 @@ class Migration(migrations.Migration):
                 ('part_no', models.CharField(max_length=20, null=True, blank=True)),
                 ('hostname', models.CharField(max_length=20, null=True, blank=True)),
                 ('idms_name', models.CharField(max_length=8, null=True, blank=True)),
-                ('ip_address', models.IntegerField(null=True, blank=True)),
+                ('ip_address', models.IntegerField(null=True, verbose_name='IP address', blank=True)),
                 ('tag', models.IntegerField(unique=True, null=True, blank=True)),
+                ('item_type', models.ForeignKey(to='app.HardwareItemType')),
             ],
             options={
                 'db_table': 'hardware',
+                'verbose_name_plural': 'hardware',
             },
             bases=('app.supportitem',),
         ),
@@ -321,6 +328,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('supportitem_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='app.SupportItem')),
                 ('part_no', models.CharField(max_length=20, null=True, blank=True)),
+                ('item_type', models.ForeignKey(to='app.ConsumableItemType')),
             ],
             options={
                 'db_table': 'consumable',
@@ -359,6 +367,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'work_done',
+                'verbose_name_plural': 'work done',
             },
             bases=(models.Model,),
         ),
@@ -366,12 +375,6 @@ class Migration(migrations.Migration):
             model_name='supportitem',
             name='contract',
             field=models.ForeignKey(blank=True, to='app.MaintenanceContract', null=True),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='supportitem',
-            name='item_type',
-            field=models.ForeignKey(to='app.ItemType'),
             preserve_default=True,
         ),
         migrations.AddField(

@@ -193,7 +193,6 @@ class SupportItem(models.Model):
     contract    = models.ForeignKey(MaintenanceContract, blank=True, null=True)
     description = models.CharField(max_length=30)
     producer    = models.ForeignKey(Company, default=-1)
-    item_type   = models.ForeignKey(ItemType)
     order_item  = models.ForeignKey(OrderItemMaterial, default=-1)
     comment     = models.TextField(null=True, blank=True)
 
@@ -204,12 +203,14 @@ class SupportItem(models.Model):
         return self.description
 
 class Consumable(SupportItem):
-    part_no = models.CharField(max_length=20, null=True, blank=True)
+    item_type = models.ForeignKey(ConsumableItemType)
+    part_no   = models.CharField(max_length=20, null=True, blank=True)
 
     class Meta:
         db_table = 'consumable'
 
 class Hardware(SupportItem):
+    item_type  = models.ForeignKey(HardwareItemType)
     part_no    = models.CharField(max_length=20, blank=True, null=True)
     hostname   = models.CharField(max_length=20, blank=True, null=True)
     idms_name  = models.CharField(max_length=8, blank=True, null=True)
@@ -221,7 +222,8 @@ class Hardware(SupportItem):
         verbose_name_plural = 'hardware'
 
 class Software(SupportItem):
-    version = models.CharField(max_length=15, blank=True, null=True)
+    item_type = models.ForeignKey(SoftwareItemType)
+    version   = models.CharField(max_length=15, blank=True, null=True)
 
     class Meta:
         db_table = 'software'
@@ -246,6 +248,7 @@ class Dispensed(Placement):
 
     class Meta:
         db_table = 'dispensed'
+        verbose_name_plural = 'dispensed'
 
 
 # ---------------------------------------------------------------------

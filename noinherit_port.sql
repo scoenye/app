@@ -1,10 +1,10 @@
 -- Commands to transfer data from the inherited table version to the no inherit version
+-- Some data fixes to prevent problems down the road
 update app_orig.order_item set department=-1 where department is null;
 update app_orig.order_item_material set item_type = -1 where item_type is null;
 update app_orig.placement set department = -1 where department is null;
 update app_orig.order_item set description = 'Unknown' where id = -1;
 update app_orig.order_item set description = 'Unassigned' where id = 0;
-
 
 insert into caller(id, name, telephone, active, location) select id, name, telephone, active, location from app_orig.caller;
 insert into department(caller_ptr_id, end_of_life) select id, end_of_life from app_orig.department;
@@ -16,9 +16,14 @@ insert into repair_technician(person_ptr_id, company_id) select id, company from
 insert into company(id, name, street, city, telephone, postcode) select distinct id, name, street, city, telephone, postcode from app_orig.company;
 insert into contractor(company_ptr_id) select id from app_orig.contractor;
 
+-- Before loading the real data, extend the -1 unknown to the subtypes. Needed to prevent
+-- a key violation when loading the support_item subtypes.
 insert into item_type(id, name) select id, name from app_orig.item_type;
+insert into hardware_item_type(itemtype_ptr_id, consumer) values (-1, 'false');
 insert into hardware_item_type(itemtype_ptr_id, consumer) select id, consumer from app_orig.hardware_item_type;
+insert into software_item_type(itemtype_ptr_id) values (-1);
 insert into software_item_type(itemtype_ptr_id) select id from app_orig.software_item_type;
+insert into consumable_item_type(itemtype_ptr_id) values (-1);
 insert into consumable_item_type(itemtype_ptr_id) select id from app_orig.consumable_item_type;
 
 insert into maintenance_contract(id, code, contractor_id, description) select id, code, contractor, description from app_orig.maintenance_contract;
@@ -29,10 +34,10 @@ insert into material_order(id, order_no, order_date, to_exec_committee, to_suppl
 insert into order_item(id, completed, description, quantity, department_id, mat_order_id) select id, completed, description, quantity, department, mat_order from app_orig.order_item;
 insert into order_item_material(orderitem_ptr_id, discount, tax, price_per_unit, item_type_id) select id, discount, tax, price_per_unit, item_type from app_orig.order_item_material;
 
-insert into support_item(id, contract_id, description, producer_id, item_type_id, order_item_id, comment) select id, contract, description, producer, item_type, order_item, comment from app_orig.support_item;
-insert into hardware(supportitem_ptr_id, part_no, hostname, idms_name, ip_address, tag) select id, part_no, hostname, idms_name, ip_address, tag from app_orig.hardware;
-insert into software(supportitem_ptr_id, version) select id, version from app_orig.software;
-insert into consumable(supportitem_ptr_id, part_no) select id, part_no from app_orig.consumable;
+insert into support_item(id, contract_id, description, producer_id, order_item_id, comment) select id, contract, description, producer, order_item, comment from app_orig.support_item;
+insert into hardware(supportitem_ptr_id, item_type_id, part_no, hostname, idms_name, ip_address, tag) select id, item_type, part_no, hostname, idms_name, ip_address, tag from app_orig.hardware;
+insert into software(supportitem_ptr_id, item_type_id, version) select id, item_type, version from app_orig.software;
+insert into consumable(supportitem_ptr_id, item_type_id, part_no) select id, item_type, part_no from app_orig.consumable;
 
 insert into order_item_consumable (orderitem_ptr_id, item_id) select id, item from app_orig.order_item_consumable ;
 

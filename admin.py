@@ -20,9 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 from django.contrib import admin
 
 # from admin_aid.forms import OrderItemForm
+from admin_aid.forms import DispenseForm
 from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter
 from navigation.admin import NavigableModelAdmin
 from app.models import *
+from docutils.nodes import Inline
 
 # Register your models here.
 class CallerAdmin(NavigableModelAdmin):
@@ -186,6 +188,14 @@ class SoftwareItemTypeAdmin(NavigableModelAdmin):
 
 admin.site.register(SoftwareItemType, SoftwareItemTypeAdmin)
 
+
+class ConsumableItemTypeAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inv_type_cons'
+    
+    ordering = ('name',)
+                
+admin.site.register(ConsumableItemType, ConsumableItemTypeAdmin)
+
 #------------------------------------------------------------------------------
 class SupportItemAdmin(NavigableModelAdmin):
     nav_item = 'nav_inventory'
@@ -244,6 +254,29 @@ class SoftwareAdmin(NavigableModelAdmin):
     )
 
 admin.site.register(Software, SoftwareAdmin)
+
+
+class DispensedInline(admin.TabularInline):
+    model = Dispensed
+    form = DispenseForm
+    ordering = ['-place_date']
+    extra = 0
+
+class ConsumableAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inv_cons'
+    
+    ordering = ('-item_type', 'description')
+    list_display = ['item_type', 'part_no', 'description']
+    list_display_links = list_display
+    inlines = [DispensedInline]
+    
+    fieldsets = (
+        (None, {
+            'fields': ('description', ('producer', 'item_type'), 'comment')
+        }),
+    )
+    
+admin.site.register(Consumable, ConsumableAdmin)
 
 #------------------------------------------------------------------------------
 class CoverPeriodInline(admin.TabularInline):

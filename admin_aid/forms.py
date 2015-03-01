@@ -22,7 +22,7 @@ from django.forms import widgets
 from django.contrib.admin.util import label_for_field
 from django.forms.forms import pretty_name
 
-from app.models import OrderItem
+from app.models import OrderItem, Dispensed, Hardware
 
 #class OrderItemForm(forms.ModelForm):
 #    """Custom form for the OrderItem inline"""
@@ -45,4 +45,12 @@ from app.models import OrderItem
 #    class Meta:
 #        model = OrderItem
 #        fields  = ["discount", "tax", "price_per_unit"]
+
+class DispenseForm(forms.ModelForm):
+    """ Custom entry form for the Dispensed inline """
     
+    consumer = forms.ModelChoiceField(queryset=Hardware.objects.filter(item_type__consumer=True))
+
+    class Meta:
+        model = Dispensed
+        fields = ["place_date", "consumer", "quantity"]
