@@ -22,7 +22,8 @@ from django.forms import widgets
 from django.contrib.admin.util import label_for_field
 from django.forms.forms import pretty_name
 
-from app.models import OrderItem, Dispensed, Hardware
+from app.admin_aid.fields import NameLocationChoiceField
+from app.models import OrderItem, Dispensed, HardwareLastAssigned
 
 #class OrderItemForm(forms.ModelForm):
 #    """Custom form for the OrderItem inline"""
@@ -49,7 +50,7 @@ from app.models import OrderItem, Dispensed, Hardware
 class DispenseForm(forms.ModelForm):
     """ Custom entry form for the Dispensed inline """
     
-    consumer = forms.ModelChoiceField(queryset=Hardware.objects.filter(item_type__consumer=True))
+    consumer = NameLocationChoiceField(queryset=HardwareLastAssigned.objects.filter(support_item__item_type__consumer=True))
 
     class Meta:
         model = Dispensed

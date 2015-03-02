@@ -397,16 +397,16 @@ class WorkDone(models.Model):
 #        db_table = 'vw_inventory'
 
 
-#class VwLastAssignedDept(models.Model):
-#    item = models.IntegerField(blank=True, null=True)
-#    department = models.IntegerField(blank=True, null=True)
-#    name = models.CharField(max_length=30, blank=True)
-#    location = models.CharField(max_length=50, blank=True)
-#    place_date = models.DateTimeField(blank=True, null=True)
-#
-#    class Meta:
-#        managed = False
-#        db_table = 'vw_last_assigned_dept'
+class HardwareLastAssigned(models.Model):
+    support_item = models.ForeignKey(Hardware, primary_key=True)
+    department = models.ForeignKey(Department, blank=True, null=True)
+    name = models.CharField(max_length=30, blank=True)
+    location = models.CharField(max_length=50, blank=True)
+    place_date = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'vw_last_assigned_dept'
 
 
 #class VwLastAssignedSerial(models.Model):
