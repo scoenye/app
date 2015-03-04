@@ -23,7 +23,8 @@ from django.contrib.admin.util import label_for_field
 from django.forms.forms import pretty_name
 
 from app.admin_aid.fields import NameLocationChoiceField
-from app.models import OrderItem, Dispensed, HardwareLastAssigned
+from app.models import OrderItem, Dispensed, HelpdeskCall
+from app.models import HardwareLastAssigned, NonConsumable 
 
 #class OrderItemForm(forms.ModelForm):
 #    """Custom form for the OrderItem inline"""
@@ -55,3 +56,14 @@ class DispenseForm(forms.ModelForm):
     class Meta:
         model = Dispensed
         fields = ["place_date", "consumer", "quantity"]
+
+
+class HelpdeskCallForm(forms.ModelForm):
+    """ Custom form to get the supported items dropdown under control """
+    
+    # Find the non-consumable items not currently assigned to an EOL department
+    item = forms.ModelChoiceField(queryset=NonConsumable.objects.filter(department__end_of_life=False).order_by("tag_ver"))
+
+    class Meta:
+        model = HelpdeskCall
+        fields = ["item"]

@@ -257,7 +257,7 @@ class HelpdeskCall(models.Model):
     call_time       = models.DateTimeField()
     call_recorder   = models.ForeignKey('Technician', related_name='helpdeskcall_recorder')
     problem_type    = models.TextField(blank=True, null=True)
-    item            = models.ForeignKey('SupportItem')
+    item            = models.ForeignKey('NonConsumable')
     assigned_tech   = models.ForeignKey('Technician', blank=True, null=True, related_name='helpdeskcall_assignee')
     closing_time    = models.DateTimeField(blank=True, null=True)
     closing_comment = models.TextField(blank=True, null=True)
@@ -427,17 +427,19 @@ class HardwareLastAssigned(models.Model):
 #        db_table = 'vw_support_item'
 
 
-#class VwSupportedHardSoft(models.Model):
-#    id = models.IntegerField(blank=True, null=True)
-#    description = models.CharField(max_length=30, blank=True)
-#    item_type = models.IntegerField(blank=True, null=True)
-#    item_type_name = models.CharField(max_length=40, blank=True)
-#    host_ver = models.CharField(max_length=-1, blank=True)
-#    department = models.IntegerField(blank=True, null=True)
-#    location = models.CharField(max_length=50, blank=True)
-#    serial_no = models.CharField(max_length=30, blank=True)
-#
-#    class Meta:
-#        managed = False
-#        db_table = 'vw_supported_hard_soft'
+class NonConsumable(models.Model):
+    support_item = models.ForeignKey(SupportItem, primary_key=True)
+    description = models.CharField(max_length=30, blank=True)
+    item_type = models.ForeignKey(ItemType)
+    item_type_name = models.CharField(max_length=40, blank=True)
+    tag_ver = models.CharField(max_length=20, blank=True)
+    department = models.ForeignKey(Department)
+    location = models.CharField(max_length=50, blank=True)
+    serial_no = models.CharField(max_length=30, blank=True)
 
+    class Meta:
+        managed = False
+        db_table = 'vw_nonconsumables'
+
+    def __unicode__(self):
+        return unicode(self.tag_ver) + ' - ' + unicode(self.item_type_name) + ' - ' + unicode(self.description)

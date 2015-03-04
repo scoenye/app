@@ -20,11 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 from django.contrib import admin
 
 # from admin_aid.forms import OrderItemForm
-from admin_aid.forms import DispenseForm
+from admin_aid.forms import DispenseForm, HelpdeskCallForm
 from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter
 from navigation.admin import NavigableModelAdmin
 from app.models import *
-from docutils.nodes import Inline
 
 # Register your models here.
 class CallerAdmin(NavigableModelAdmin):
@@ -150,6 +149,8 @@ class WorkDoneInline(admin.TabularInline):
 class HelpdeskCallAdmin(NavigableModelAdmin):
     nav_item = 'nav_helpdesk'
     inlines = [WorkDoneInline]
+    form = HelpdeskCallForm
+
     fieldsets = (
         (None, {
             'fields': (('caller', 'call_time', 'call_recorder'), 'problem_type', 'item')
@@ -255,7 +256,7 @@ class SoftwareAdmin(NavigableModelAdmin):
 
 admin.site.register(Software, SoftwareAdmin)
 
-
+#--------------------------------------------------------------------
 class DispensedInline(admin.TabularInline):
     model = Dispensed
     form = DispenseForm
