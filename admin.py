@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 
 from django.contrib import admin
 
-# from admin_aid.forms import OrderItemForm
+from admin_aid.forms import OrderItemMaterialForm
 from admin_aid.forms import DispenseForm, HelpdeskCallForm
 from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter
 from navigation.admin import NavigableModelAdmin
@@ -267,7 +267,7 @@ class ConsumableAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_cons'
     
     ordering = ('-item_type', 'description')
-    list_display = ['item_type', 'part_no', 'description']
+    list_display = ['item_type', 'part_no', 'description', 'on_hand']
     list_display_links = list_display
     inlines = [DispensedInline]
     
@@ -276,6 +276,10 @@ class ConsumableAdmin(NavigableModelAdmin):
             'fields': ('description', ('producer', 'item_type'), 'comment')
         }),
     )
+    
+    def on_hand(self, obj):
+        return obj.consumableonhand_set.get(pk=obj.id).on_hand
+        
     
 admin.site.register(Consumable, ConsumableAdmin)
 
@@ -291,18 +295,23 @@ class MaintenanceContractAdmin(NavigableModelAdmin):
 admin.site.register(MaintenanceContract, MaintenanceContractAdmin)
 
 #------------------------------------------------------------------------------
-#class OrderItemInline(admin.TabularInline):
-#    form = OrderItemForm
-#    model = OrderItem
-#    extra = 0
-#    fieldsets = (
-#        (None, {
-#            'fields': ('quantity', 'description', 'department', 'item_type', 'completed')
-#        }),
-#        ('Extended', {
-#            'fields': ('discount', 'tax', 'price_per_unit')
-#        }),
-#    )
+class OrderItemMaterialInline(admin.TabularInline):
+    form = OrderItemMaterialForm
+    model = OrderItemMaterial
+    extra = 0
+
+    fieldsets = (
+        (None, {
+            'fields': ('quantity', 'description', 'department', 'item_type', 'completed')
+        }),
+        ('Extended', {
+            'fields': ('discount', 'tax', 'price_per_unit')
+        }),
+    )
+
+class OrderItemConsumableInline(admin.TabularInline):
+    model = OrderItemConsumable
+    extra = 0
 
 class MaterialOrderAdmin(NavigableModelAdmin):
     nav_item = 'nav_order'
@@ -311,10 +320,11 @@ class MaterialOrderAdmin(NavigableModelAdmin):
     ordering = ['-order_date']
     list_display = ['order_no', 'description']
     list_display_links = list_display
-#    inlines = [OrderItemInline]
+    inlines = [OrderItemMaterialInline, OrderItemConsumableInline]
+
     fieldsets = (
         (None, {
-            'fields': (('order_id', 'supplier'), ('order_date', 'to_exec_committee', 'to_supply_dept'), 'description')
+            'fields': (('order_no', 'supplier'), ('order_date', 'to_exec_committee', 'to_supply_dept'), 'description')
         }),
         ('Comments', {
             'classes': ('collapse',),

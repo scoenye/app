@@ -359,13 +359,13 @@ class WorkDone(models.Model):
 #        db_table = 'vw_consumables_dispensed'
 
 
-#class VwConsumablesOnhand(models.Model):
-#    id = models.IntegerField(blank=True, null=True)
-#    on_hand = models.BigIntegerField(blank=True, null=True)
-#
-#    class Meta:
-#        managed = False
-#        db_table = 'vw_consumables_onhand'
+class ConsumableOnHand(models.Model):
+    consumable = models.ForeignKey(Consumable, primary_key=True)
+    on_hand = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'vw_consumable_onhand'
 
 
 #class VwFirstAssignedDept(models.Model):

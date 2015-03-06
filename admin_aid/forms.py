@@ -23,30 +23,33 @@ from django.contrib.admin.util import label_for_field
 from django.forms.forms import pretty_name
 
 from app.admin_aid.fields import NameLocationChoiceField
-from app.models import OrderItem, Dispensed, HelpdeskCall
+from app.models import OrderItemMaterial, Dispensed, HelpdeskCall
 from app.models import HardwareLastAssigned, NonConsumable 
 
-#class OrderItemForm(forms.ModelForm):
-#    """Custom form for the OrderItem inline"""
-#
-#    meta    = OrderItem._meta
-#    
-#    # Setting "required" is superfluous if TabularInlineForm is used, but just in case that changes...
-#    discount = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'5'}),
-#                                label = pretty_name(label_for_field('discount', OrderItem)),
-#                                required = not meta.get_field('discount').blank)
-#    
-#    tax = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'5'}),
-#                           label = pretty_name(label_for_field('tax', OrderItem)),
-#                           required = not meta.get_field('tax').blank)
-#    
-#    price_per_unit = forms.FloatField(widget = widgets.NumberInput(attrs = {'size':'10'}),
-#                                      label = pretty_name(label_for_field('price_per_unit', OrderItem)),
-#                                      required = not meta.get_field('price_per_unit').blank)
-#
-#    class Meta:
-#        model = OrderItem
-#        fields  = ["discount", "tax", "price_per_unit"]
+class OrderItemMaterialForm(forms.ModelForm):
+    """Custom form for the OrderItem inline"""
+
+    meta    = OrderItemMaterial._meta
+    
+    # Setting "required" is superfluous if TabularInlineForm is used, but just in case that changes...
+    # Do not use NumberInput. The size is uncontrollable. (HTML5 "new and improved")
+    discount = forms.FloatField(widget = widgets.TextInput(attrs = {'size':'5'}),
+                                label = pretty_name(label_for_field('discount', OrderItemMaterial)),
+                                required = not meta.get_field('discount').blank)
+    
+    tax = forms.FloatField(widget = widgets.TextInput(attrs = {'size':'5'}),
+                           label = pretty_name(label_for_field('tax', OrderItemMaterial)),
+                           required = not meta.get_field('tax').blank)
+    
+    price_per_unit = forms.FloatField(widget = widgets.TextInput(attrs = {'size':'10'}),
+                                      label = pretty_name(label_for_field('price_per_unit', OrderItemMaterial)),
+                                      required = not meta.get_field('price_per_unit').blank)
+
+    class Meta:
+        model = OrderItemMaterial
+        fields  = ["discount", "tax", "price_per_unit"]
+
+
 
 class DispenseForm(forms.ModelForm):
     """ Custom entry form for the Dispensed inline """

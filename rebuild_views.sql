@@ -34,3 +34,20 @@ create view vw_nonconsumables as
 	              inner join item_type on software.item_type_id = item_type.id
 	              inner join vw_last_assigned_serial on software.supportitem_ptr_id = vw_last_assigned_serial.support_item_id
 	              inner join vw_last_assigned_dept on software.supportitem_ptr_id = vw_last_assigned_dept.support_item_id;
+
+create view vw_consumables_delivered as
+	SELECT order_item_consumable.item_id AS consumable_id, sum(order_item.quantity) AS quantity
+    FROM order_item_consumable INNER JOIN order_item ON order_item_consumable.orderitem_ptr_id = order_item.id
+    WHERE order_item.completed IS NOT NULL
+    GROUP BY order_item_consumable.item_id;
+
+create view vw_consumables_dispensed as
+	SELECT placement.support_item_id as consumable_id, sum(dispensed.quantity) AS dispensed
+    FROM dispensed INNER JOIN placement ON dispensed.placement_ptr_id = placement.id
+    GROUP BY placement.support_item_id;
+
+create view vw_consumables_onhand as
+	SELECT consumable.supportitem_ptr_id as consumable_id, 
+	       COALESCE(vw_consumables_delivered.quantity, 0) - COALESCE(vw_consumables_dispensed.dispensed, 0) AS on_hand 
+	FROM consumable LEFT JOIN vw_consumables_delivered ON vw_consumables_delivered.consumable_id = consumable.supportitem_ptr_id 
+	                LEFT JOIN vw_consumables_dispensed ON vw_consumables_dispensed.consumable_id = consumable.supportitem_ptr_id;
