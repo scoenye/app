@@ -21,9 +21,16 @@ class Migration(migrations.Migration):
             },
             bases=(models.Model,),
         ),
-        migrations.AlterField(
-            model_name='helpdeskcall',
-            name='item',
-            field=models.ForeignKey(to='app.NonConsumable'),
-        ),
+        # Do not try to add a FK constraint pointing at a view...
+        migrations.RunSQL(
+            "select 1;",
+            "select 1;",
+            state_operations = [
+                migrations.AlterField(
+                    model_name='helpdeskcall',
+                    name='item',
+                    field=models.ForeignKey(to='app.NonConsumable'),
+                ),
+            ]
+        )
     ]
