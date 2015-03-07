@@ -200,7 +200,7 @@ class SupportItem(models.Model):
         db_table = 'support_item'
 
     def __unicode__(self):
-        return self.description
+        return unicode(self.description)
 
 class Consumable(SupportItem):
     item_type = models.ForeignKey(ConsumableItemType)
@@ -240,7 +240,7 @@ class Placement(models.Model):
         db_table = 'placement'
 
     def __unicode__(self):
-        return self.location
+        return unicode(self.location)
 
 class Dispensed(Placement):
     consumer = models.ForeignKey('Hardware')
@@ -298,7 +298,7 @@ class SerialNo(models.Model):
         db_table = 'serial_no'
 
     def __unicode__(self):
-        return self.serial_no
+        return unicode(self.serial_no)
 
 class Weekday(models.Model):
     day = models.CharField(max_length=10)
@@ -398,7 +398,7 @@ class ConsumableOnHand(models.Model):
 
 
 class HardwareLastAssigned(models.Model):
-    support_item = models.ForeignKey(Hardware, primary_key=True)
+    hardware = models.OneToOneField(Hardware, db_column='support_item_id', related_name='last_assigned')
     department = models.ForeignKey(Department, blank=True, null=True)
     name = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=50, blank=True)

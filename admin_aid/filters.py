@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin import SimpleListFilter
-from app.models import HardwareItemType, SoftwareItemType
+from app.models import Department, HardwareItemType, SoftwareItemType
 
 class HardwareItemTypeFilter(SimpleListFilter):
     title = _('by item type')
@@ -46,3 +46,16 @@ class SoftwareItemTypeFilter(SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value():
             return queryset.filter(item_type__exact=self.value())
+
+class PlacementFilter(SimpleListFilter):
+    title = _('by placement')
+    
+    parameter_name = 'test'
+
+    def lookups(self, request, model_admin):
+        qs = Department.objects.filter(active=True).order_by('name')
+        return qs.values_list('id', 'name')
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(last_assigned__department=self.value())

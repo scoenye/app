@@ -21,7 +21,7 @@ from django.contrib import admin
 
 from admin_aid.forms import OrderItemMaterialForm
 from admin_aid.forms import DispenseForm, HelpdeskCallForm
-from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter
+from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, PlacementFilter
 from navigation.admin import NavigableModelAdmin
 from app.models import *
 
@@ -218,10 +218,11 @@ class HardwareAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_hardw'
 
     ordering = ('item_type', 'part_no', 'description')
-    list_display = ['tag', 'part_no', 'description']
+    list_display = ['tag', 'manufacturer', 'part_no', 'description']
     list_display_links = list_display
-    list_filter = [HardwareItemTypeFilter]
+    list_filter = [HardwareItemTypeFilter, PlacementFilter]
     inlines = [SerialInline, PlacementInline]
+
     fieldsets = (
         (None, {
             'fields': (('tag', 'description'), ('producer', 'part_no'), 'item_type', 'comment', ('hostname', 'ip_address'))
@@ -231,6 +232,9 @@ class HardwareAdmin(NavigableModelAdmin):
             'fields': (('contract', 'order_item'), )
         })
     )
+    
+    def manufacturer(self, obj):
+        return obj.producer.name
     
 admin.site.register(Hardware, HardwareAdmin)
 

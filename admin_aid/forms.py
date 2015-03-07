@@ -54,7 +54,7 @@ class OrderItemMaterialForm(forms.ModelForm):
 class DispenseForm(forms.ModelForm):
     """ Custom entry form for the Dispensed inline """
     
-    consumer = NameLocationChoiceField(queryset=HardwareLastAssigned.objects.filter(support_item__item_type__consumer=True))
+    consumer = NameLocationChoiceField(queryset=HardwareLastAssigned.objects.filter(hardware__item_type__consumer=True))
 
     class Meta:
         model = Dispensed
