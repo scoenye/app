@@ -1,13 +1,9 @@
 from navigation import tier
+from navigation.tier import nav_tree
 
 # Defined the nav_tree block for this application. This builds a tree and a flat addressable
 # representation at the same time. The tree will generate the children/siblings lists,
 # the dictionary makes it possible to address random parts of the tree.
-
-# TODO: extend this mechanism to the project level so the upper level becomes the list of
-#       all applications in the project.
-
-nav_tree = {}
 
 nav_tree['nav_root'] = tier.TieredNavigation('App', 'app:index')
 tier.TieredNavigation.home = tier.TieredNavigation('Home', 'app:index')        # The Home static node. 
