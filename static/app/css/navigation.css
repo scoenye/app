@@ -9,7 +9,7 @@ UL.navbar {
 UL.navbar LI {
 	font: bold small Arial, Helvetica, sans-serif;
 	list-style-type: none;
-	float: left;
+	float: left; 
 	padding-bottom: 4px;
     padding-top: 3px;
 	margin-bottom: 2px;
@@ -17,7 +17,16 @@ UL.navbar LI {
 }
 
 /* Undo Django admin mess */
-#header UL.navbar LI a:link, #header UL.navbar LI a:visited {
+#user-tools {
+	padding: 0.5em 10px;
+}
+
+#header {
+	color: #5b80b2;
+	background-color: #f8f8f8;
+}
+
+#header a:link, #header a:visited {
     color: black
 }
 
@@ -66,6 +75,14 @@ UL.navbar LI.selected SPAN.navtab_right {
 
 .EndFloat {clear: left}
 
+HR {
+	height: 4px;
+	background-color: #7e0101;
+	border: medium none;
+	margin-bottom: 2px;
+	padding: 0;
+	clear: both
+}
 /* Because IE makes a mess out out the HR tag */
 DIV.HR {
 	clear: left;
