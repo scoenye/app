@@ -398,7 +398,7 @@ class ConsumableOnHand(models.Model):
 
 
 class HardwareLastAssigned(models.Model):
-    hardware = models.OneToOneField(Hardware, db_column='support_item_id', related_name='last_assigned')
+    hardware = models.OneToOneField(Hardware, primary_key=True, db_column='support_item_id', related_name='last_assigned')
     department = models.ForeignKey(Department, blank=True, null=True)
     name = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=50, blank=True)
