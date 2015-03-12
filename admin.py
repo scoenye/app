@@ -218,7 +218,7 @@ class HardwareAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_hardw'
 
     ordering = ('item_type', 'part_no', 'description')
-    list_display = ['tag', 'manufacturer', 'part_no', 'description']
+    list_display = ['tag', 'manufacturer', 'part_no', 'description', 'placement']
     list_display_links = list_display
     list_filter = [HardwareItemTypeFilter, PlacementFilter]
     inlines = [SerialInline, PlacementInline]
@@ -235,6 +235,9 @@ class HardwareAdmin(NavigableModelAdmin):
     
     def manufacturer(self, obj):
         return obj.producer.name
+
+    def placement(self, obj):
+        return obj.last_assigned.location
     
 admin.site.register(Hardware, HardwareAdmin)
 
