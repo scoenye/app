@@ -22,9 +22,9 @@ from django.forms import widgets
 from django.contrib.admin.util import label_for_field
 from django.forms.forms import pretty_name
 
-from app.admin_aid.fields import NameLocationChoiceField
-from app.models import OrderItemMaterial, Dispensed, HelpdeskCall
-from app.models import HardwareLastAssigned, NonConsumable 
+from app.admin_aid.fields import NameLocationChoiceField, ItemTypeDescChoiceField
+from app.models import OrderItemMaterial, OrderItemConsumable, Dispensed, Consumable
+from app.models import HelpdeskCall, HardwareLastAssigned, NonConsumable 
 
 class OrderItemMaterialForm(forms.ModelForm):
     """Custom form for the OrderItem inline"""
@@ -49,12 +49,20 @@ class OrderItemMaterialForm(forms.ModelForm):
         model = OrderItemMaterial
         fields  = ["discount", "tax", "price_per_unit"]
 
-
+class OrderItemConsumableForm(forms.ModelForm):
+    """Custom form for the consumable OrderItem inlines """
+    item = ItemTypeDescChoiceField(queryset = Consumable.objects.all().order_by("item_type__name", "description"),
+                                   label = pretty_name(label_for_field('item', OrderItemConsumable)))
+    
+    class Meta:
+        model  = OrderItemConsumable
+        fields = ["completed", "department", "description", "quantity", "item"] 
 
 class DispenseForm(forms.ModelForm):
     """ Custom entry form for the Dispensed inline """
     
-    consumer = NameLocationChoiceField(queryset=HardwareLastAssigned.objects.filter(hardware__item_type__consumer=True))
+    consumer = NameLocationChoiceField(queryset=HardwareLastAssigned.objects.filter(hardware__item_type__consumer=True),
+                                       label = pretty_name(label_for_field('consumer', Dispensed)))
 
     class Meta:
         model = Dispensed
@@ -65,7 +73,8 @@ class HelpdeskCallForm(forms.ModelForm):
     """ Custom form to get the supported items dropdown under control """
     
     # Find the non-consumable items not currently assigned to an EOL department
-    item = forms.ModelChoiceField(queryset=NonConsumable.objects.filter(department__end_of_life=False).order_by("tag_ver"))
+    item = forms.ModelChoiceField(queryset=NonConsumable.objects.filter(department__end_of_life=False).order_by("tag_ver"),
+                                  label = pretty_name(label_for_field('item', HelpdeskCall)))
 
     class Meta:
         model = HelpdeskCall

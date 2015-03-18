@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 
 from django.contrib import admin
 
-from admin_aid.forms import OrderItemMaterialForm
+from admin_aid.forms import OrderItemMaterialForm, OrderItemConsumableForm
 from admin_aid.forms import DispenseForm, HelpdeskCallForm
 from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, PlacementFilter
 from navigation.admin import NavigableModelAdmin
@@ -221,6 +221,7 @@ class HardwareAdmin(NavigableModelAdmin):
     list_display = ['tag', 'manufacturer', 'part_no', 'description', 'placement']
     list_display_links = list_display
     list_filter = [HardwareItemTypeFilter, PlacementFilter]
+    search_fields = ['tag', 'last_assigned__location']
     inlines = [SerialInline, PlacementInline]
 
     fieldsets = (
@@ -318,6 +319,7 @@ class OrderItemMaterialInline(admin.TabularInline):
 
 class OrderItemConsumableInline(admin.TabularInline):
     model = OrderItemConsumable
+    form = OrderItemConsumableForm
     extra = 0
 
 class MaterialOrderAdmin(NavigableModelAdmin):
