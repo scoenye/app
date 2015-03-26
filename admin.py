@@ -285,9 +285,14 @@ class ConsumableAdmin(NavigableModelAdmin):
         }),
     )
     
+    def get_queryset(self, request):
+        consumables = super(ConsumableAdmin, self).get_queryset(request)
+        consumables = consumables.select_related("inventory", "item_type")
+
+        return consumables
+
     def on_hand(self, obj):
-        return obj.consumableonhand_set.get(pk=obj.id).on_hand
-        
+        return obj.inventory.on_hand
     
 admin.site.register(Consumable, ConsumableAdmin)
 

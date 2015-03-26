@@ -360,7 +360,7 @@ class WorkDone(models.Model):
 
 
 class ConsumableOnHand(models.Model):
-    consumable = models.ForeignKey(Consumable, primary_key=True)
+    consumable = models.OneToOneField(Consumable, primary_key=True, db_column="consumable_id", related_name="inventory")
     on_hand = models.IntegerField()
 
     class Meta:
