@@ -241,6 +241,12 @@ class HardwareAdmin(NavigableModelAdmin):
     def placement(self, obj):
         return obj.last_assigned.location
     
+    def get_queryset(self, request):
+        hardware = super(HardwareAdmin, self).get_queryset(request)
+        hardware = hardware.select_related("inventory", "item_type", "last_assigned", "producer")
+
+        return hardware
+
 admin.site.register(Hardware, HardwareAdmin)
 
 
@@ -262,6 +268,12 @@ class SoftwareAdmin(NavigableModelAdmin):
             'fields': (('contract', 'order_item'), )
         })
     )
+
+    def get_queryset(self, request):
+        software = super(SoftwareAdmin, self).get_queryset(request)
+        software = software.select_related("inventory", "item_type", "last_assigned", "producer")
+
+        return software
 
 admin.site.register(Software, SoftwareAdmin)
 
