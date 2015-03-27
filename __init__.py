@@ -20,10 +20,11 @@ nav_tree['nav_technician'] = tier.TieredNavigation('Technician',  'admin:app_tec
 
 nav_tree['nav_helpdesk']   = tier.TieredNavigation('Helpdesk',    'admin:app_helpdeskcall_changelist', nav_tree.get('nav_root'))
     
-nav_tree['nav_inventory']  = tier.TieredNavigation('Inventory',   'app:inventory_index', nav_tree.get('nav_root'))
-nav_tree['nav_inv_hardw']  = tier.TieredNavigation('Hardware',    'admin:app_hardware_changelist', nav_tree.get('nav_inventory'))
-nav_tree['nav_inv_softw']  = tier.TieredNavigation('Software',    'admin:app_software_changelist', nav_tree.get('nav_inventory'))
-nav_tree['nav_inv_cons']   = tier.TieredNavigation('Consumables', 'admin:app_consumable_changelist', nav_tree.get('nav_inventory'))
+nav_tree['nav_inventory']     = tier.TieredNavigation('Inventory',   'app:inventory_index',             nav_tree.get('nav_root'))
+nav_tree['nav_inv_hardw']     = tier.TieredNavigation('Hardware',    'admin:app_hardware_changelist',   nav_tree.get('nav_inventory'))
+nav_tree['nav_inv_softw']     = tier.TieredNavigation('Software',    'admin:app_software_changelist',   nav_tree.get('nav_inventory'))
+nav_tree['nav_inv_cons']      = tier.TieredNavigation('Consumables', 'admin:app_consumable_changelist', nav_tree.get('nav_inventory'))
+nav_tree['nav_inv_dispensed'] = tier.TieredNavigation('Dispensed',   'admin:app_dispensed_changelist',  nav_tree.get('nav_inv_cons'))
     
 nav_tree['nav_inventory_type'] = tier.TieredNavigation('Inventory type', 'app:inventory_types_index', nav_tree.get('nav_root'))
 nav_tree['nav_inv_type_hardw'] = tier.TieredNavigation('Hardware',   'admin:app_hardwareitemtype_changelist', nav_tree.get('nav_inventory_type'))

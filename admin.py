@@ -20,8 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 from django.contrib import admin
 
 from admin_aid.forms import OrderItemMaterialForm, OrderItemConsumableForm
-from admin_aid.forms import DispenseForm, HelpdeskCallForm
-from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, PlacementFilter
+from admin_aid.forms import HelpdeskCallForm
+from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, ConsumableItemTypeFilter
+from admin_aid.filters import DispensedItemTypeFilter, PlacementFilter, ConsumerFilter
 from navigation.admin import NavigableModelAdmin
 from app.models import *
 
@@ -265,19 +266,13 @@ class SoftwareAdmin(NavigableModelAdmin):
 admin.site.register(Software, SoftwareAdmin)
 
 #--------------------------------------------------------------------
-class DispensedInline(admin.TabularInline):
-    model = Dispensed
-    form = DispenseForm
-    ordering = ['-place_date']
-    extra = 0
-
 class ConsumableAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_cons'
     
     ordering = ('-item_type', 'description')
     list_display = ['item_type', 'part_no', 'description', 'on_hand']
     list_display_links = list_display
-    inlines = [DispensedInline]
+    list_filter = [ConsumableItemTypeFilter]
     
     fieldsets = (
         (None, {
@@ -295,6 +290,28 @@ class ConsumableAdmin(NavigableModelAdmin):
         return obj.inventory.on_hand
     
 admin.site.register(Consumable, ConsumableAdmin)
+
+
+class DispensedAdmin(NavigableModelAdmin):
+    nav_item = 'nav_inv_dispensed'
+
+    ordering = ['-place_date']
+    list_display = ['item_type', 'support_item', 'place_date', 'consumer', 'consumer_location']
+    list_filter = [ConsumerFilter, DispensedItemTypeFilter]
+    
+    def item_type(self, obj):
+        return obj.support_item.consumable.item_type
+    
+    def consumer_location(self, obj):
+        return obj.consumer.last_assigned.location
+
+    def get_queryset(self, request):
+        dispensed = super(DispensedAdmin, self).get_queryset(request)
+        dispensed = dispensed.select_related("consumer", "consumer__last_assigned", "support_item", "support_item__consumable", "support_item__consumable__item_type")
+
+        return dispensed
+
+admin.site.register(Dispensed, DispensedAdmin)
 
 #------------------------------------------------------------------------------
 class CoverPeriodInline(admin.TabularInline):
