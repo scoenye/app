@@ -368,7 +368,7 @@ class MaterialOrderAdmin(NavigableModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': (('order_no', 'supplier'), ('order_date', 'to_exec_committee', 'to_supply_dept'), 'description')
+            'fields': (('order_no', 'supplier', 'supplier_ref'), ('order_date', 'to_exec_committee', 'to_supply_dept'), 'description')
         }),
         ('Comments', {
             'classes': ('collapse',),
