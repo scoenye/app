@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 from django.contrib import admin
 
 from admin_aid.forms import OrderItemMaterialForm, OrderItemConsumableForm
-from admin_aid.forms import HelpdeskCallForm
+from admin_aid.forms import HelpdeskCallForm, DispenseForm
 from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, ConsumableItemTypeFilter
 from admin_aid.filters import DispensedItemTypeFilter, PlacementFilter, ConsumerFilter
 from navigation.admin import NavigableModelAdmin
@@ -280,7 +280,7 @@ admin.site.register(Software, SoftwareAdmin)
 #--------------------------------------------------------------------
 class ConsumableAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_cons'
-    
+
     ordering = ('-item_type', 'description')
     list_display = ['item_type', 'part_no', 'description', 'on_hand']
     list_display_links = list_display
@@ -307,6 +307,7 @@ admin.site.register(Consumable, ConsumableAdmin)
 class DispensedAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_dispensed'
 
+    form = DispenseForm
     ordering = ['-place_date']
     list_display = ['item_type', 'support_item', 'place_date', 'consumer', 'consumer_location']
     list_filter = [ConsumerFilter, DispensedItemTypeFilter]

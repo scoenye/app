@@ -170,7 +170,8 @@ class OrderItem(models.Model):
         db_table = 'order_item'
 
     def __unicode__(self):
-        return self.description
+        return unicode(self.description)
+
 
 class OrderItemConsumable(OrderItem):
     item = models.ForeignKey('Consumable')
@@ -233,7 +234,7 @@ class Software(SupportItem):
 class Placement(models.Model):
     support_item = models.ForeignKey("SupportItem")
     place_date   = models.DateTimeField()
-    department   = models.ForeignKey(Department)
+    department   = models.ForeignKey(Department, default = -1)
     location     = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:

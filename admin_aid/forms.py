@@ -25,6 +25,7 @@ from django.forms.forms import pretty_name
 from app.admin_aid.fields import NameLocationChoiceField, ItemTypeDescChoiceField
 from app.models import OrderItemMaterial, OrderItemConsumable, Dispensed, Consumable
 from app.models import HelpdeskCall, Hardware, NonConsumable, Department
+from django.forms.fields import ChoiceField
 
 class OrderItemMaterialForm(forms.ModelForm):
     """Custom form for the OrderItem inline"""
@@ -58,15 +59,26 @@ class OrderItemConsumableForm(forms.ModelForm):
         model  = OrderItemConsumable
         fields = ["completed", "department", "description", "quantity", "item"] 
 
+
+class HardwareForm(forms.ModelForm):
+#    order_item = ChoiceField(queryset = OrderItemMaterial.objects.filter(item_type="???"))
+    
+    class Meta:
+        model = Hardware
+        fields = ['tag', 'description', 'producer', 'part_no', 'item_type', 'comment', 
+                  'hostname', 'ip_address', 'contract', 'order_item']
+
 class DispenseForm(forms.ModelForm):
     """ Custom entry form for the Dispensed inline """
     
-    consumer = NameLocationChoiceField(queryset=Hardware.objects.filter(item_type__consumer=True).select_related("last_assigned"),
+    support_item = ItemTypeDescChoiceField(queryset = Consumable.objects.all().select_related("item_type").order_by("item_type__name", "description"),
+                                           label = pretty_name(label_for_field('support_item', Dispensed)))
+    consumer = NameLocationChoiceField(queryset = Hardware.objects.filter(item_type__consumer=True).select_related("supportitem", "last_assigned").order_by("description", "last_assigned__location"),
                                        label = pretty_name(label_for_field('consumer', Dispensed)))
 
     class Meta:
         model = Dispensed
-        fields = ["place_date", "consumer", "quantity"]
+        fields = ["support_item", "place_date", "consumer", "quantity"]
 
 
 class HelpdeskCallForm(forms.ModelForm):
