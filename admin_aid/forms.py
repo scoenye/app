@@ -52,7 +52,7 @@ class OrderItemMaterialForm(forms.ModelForm):
 
 class OrderItemConsumableForm(forms.ModelForm):
     """Custom form for the consumable OrderItem inlines """
-    item = ItemTypeDescChoiceField(queryset = Consumable.objects.all().order_by("item_type__name", "description"),
+    item = ItemTypeDescChoiceField(queryset = Consumable.objects.select_related("item_type").order_by("item_type__name", "description"),
                                    label = pretty_name(label_for_field('item', OrderItemConsumable)))
     
     class Meta:
@@ -69,7 +69,7 @@ class HardwareForm(forms.ModelForm):
                   'hostname', 'ip_address', 'contract', 'order_item']
 
 class DispenseForm(forms.ModelForm):
-    """ Custom entry form for the Dispensed inline """
+    """ Custom entry form for the Dispensed admin """
     
     support_item = ItemTypeDescChoiceField(queryset = Consumable.objects.all().select_related("item_type").order_by("item_type__name", "description"),
                                            label = pretty_name(label_for_field('support_item', Dispensed)))
