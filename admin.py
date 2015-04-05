@@ -318,6 +318,7 @@ class DispensedAdmin(NavigableModelAdmin):
     def consumer_location(self, obj):
         return obj.consumer.last_assigned.location
 
+    # For the change list
     def get_queryset(self, request):
         dispensed = super(DispensedAdmin, self).get_queryset(request)
         dispensed = dispensed.select_related("consumer", "consumer__last_assigned", "support_item", "support_item__consumable", "support_item__consumable__item_type")

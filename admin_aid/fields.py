@@ -23,7 +23,7 @@ from django import forms
 # dropdown fields in inlines.
 class NameLocationChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return unicode(obj.hardware.description) + ' - ' + unicode(obj.last_assigned.location)
+        return unicode(obj.description) + ' - ' + unicode(obj.last_assigned.location)
 
 class ItemTypeDescChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
