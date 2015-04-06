@@ -194,7 +194,6 @@ class SupportItem(models.Model):
     contract    = models.ForeignKey(MaintenanceContract, blank=True, null=True)
     description = models.CharField(max_length=30)
     producer    = models.ForeignKey(Company, default=-1)
-    order_item  = models.ForeignKey(OrderItemMaterial, default=-1)
     comment     = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -217,6 +216,7 @@ class Hardware(SupportItem):
     idms_name  = models.CharField(max_length=8, blank=True, null=True)
     ip_address = models.IntegerField(verbose_name='IP address', blank=True, null=True)
     tag        = models.IntegerField(unique=True, blank=True, null=True)
+    order_item  = models.ForeignKey(OrderItemMaterial, default=-1)
 
     class Meta:
         db_table = 'hardware'
@@ -225,6 +225,7 @@ class Hardware(SupportItem):
 class Software(SupportItem):
     item_type = models.ForeignKey(SoftwareItemType)
     version   = models.CharField(max_length=15, blank=True, null=True)
+    order_item  = models.ForeignKey(OrderItemMaterial, default=-1)
 
     class Meta:
         db_table = 'software'
