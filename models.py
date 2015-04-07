@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models import Q
 
 
 class Caller(models.Model):
@@ -210,21 +211,21 @@ class Consumable(SupportItem):
         db_table = 'consumable'
 
 class Hardware(SupportItem):
-    item_type  = models.ForeignKey(HardwareItemType)
-    part_no    = models.CharField(max_length=20, blank=True, null=True)
-    hostname   = models.CharField(max_length=20, blank=True, null=True)
-    idms_name  = models.CharField(max_length=8, blank=True, null=True)
-    ip_address = models.IntegerField(verbose_name='IP address', blank=True, null=True)
-    tag        = models.IntegerField(unique=True, blank=True, null=True)
-    order_item  = models.ForeignKey(OrderItemMaterial, default=-1)
+    item_type   = models.ForeignKey(HardwareItemType)
+    part_no     = models.CharField(max_length=20, blank=True, null=True)
+    hostname    = models.CharField(max_length=20, blank=True, null=True)
+    idms_name   = models.CharField(max_length=8, blank=True, null=True)
+    ip_address  = models.IntegerField(verbose_name='IP address', blank=True, null=True)
+    tag         = models.IntegerField(unique=True, blank=True, null=True)
+    order_item  = models.ForeignKey(OrderItemMaterial, default=-1, limit_choices_to=Q())
 
     class Meta:
         db_table = 'hardware'
         verbose_name_plural = 'hardware'
 
 class Software(SupportItem):
-    item_type = models.ForeignKey(SoftwareItemType)
-    version   = models.CharField(max_length=15, blank=True, null=True)
+    item_type   = models.ForeignKey(SoftwareItemType)
+    version     = models.CharField(max_length=15, blank=True, null=True)
     order_item  = models.ForeignKey(OrderItemMaterial, default=-1)
 
     class Meta:

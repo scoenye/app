@@ -28,3 +28,7 @@ class NameLocationChoiceField(forms.ModelChoiceField):
 class ItemTypeDescChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return unicode(obj.item_type.name) + ' - ' + unicode(obj.description)
+
+class OrderItemOrderChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return unicode(obj.mat_order.order_no) + ' - ' + unicode(obj.description)

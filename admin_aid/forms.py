@@ -22,9 +22,9 @@ from django.forms import widgets
 from django.contrib.admin.util import label_for_field
 from django.forms.forms import pretty_name
 
-from app.admin_aid.fields import NameLocationChoiceField, ItemTypeDescChoiceField
+from app.admin_aid.fields import NameLocationChoiceField, ItemTypeDescChoiceField, OrderItemOrderChoiceField
 from app.models import OrderItemMaterial, OrderItemConsumable, Dispensed, Consumable
-from app.models import HelpdeskCall, Hardware, NonConsumable
+from app.models import HelpdeskCall, Hardware, Software, NonConsumable
 
 class OrderItemMaterialForm(forms.ModelForm):
     """Custom form for the OrderItem inline"""
@@ -60,12 +60,38 @@ class OrderItemConsumableForm(forms.ModelForm):
 
 
 class HardwareForm(forms.ModelForm):
-#    order_item = ChoiceField(queryset = OrderItemMaterial.objects.filter(item_type="???"))
+    # TODO: limit to orders with uncovered items.
+    def __init__(self, *args, **kwargs):
+        super(HardwareForm, self).__init__(*args, **kwargs)
+        if self.instance.item_type_id is not None:
+            self.fields['order_item'].queryset = OrderItemMaterial.objects.filter(
+                item_type=self.instance.item_type).select_related("mat_order").order_by("-mat_order__order_no")
     
+    order_item = OrderItemOrderChoiceField(queryset = OrderItemMaterial.objects,
+                                           required = False)
+
     class Meta:
         model = Hardware
         fields = ['tag', 'description', 'producer', 'part_no', 'item_type', 'comment', 
                   'hostname', 'ip_address', 'contract', 'order_item']
+
+
+class SoftwareForm(forms.ModelForm):
+    # TODO: limit to orders with uncovered items.
+    def __init__(self, *args, **kwargs):
+        super(SoftwareForm, self).__init__(*args, **kwargs)
+        if self.instance.item_type_id is not None:
+            self.fields['order_item'].queryset = OrderItemMaterial.objects.filter(
+                item_type=self.instance.item_type).select_related("mat_order").order_by("-mat_order__order_no")
+
+    order_item = OrderItemOrderChoiceField(queryset = OrderItemMaterial.objects,
+                                           required = False)
+    
+    class Meta:
+        model = Software
+        fields = ['description', 'producer', 'contract',  'comment', 
+                  'version', 'item_type', 'order_item']
+
 
 class DispenseForm(forms.ModelForm):
     """ Custom entry form for the Dispensed admin """

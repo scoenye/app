@@ -21,10 +21,12 @@ from django.contrib import admin
 
 from admin_aid.forms import OrderItemMaterialForm, OrderItemConsumableForm
 from admin_aid.forms import HelpdeskCallForm, DispenseForm
+from admin_aid.forms import HardwareForm, SoftwareForm
 from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, ConsumableItemTypeFilter
 from admin_aid.filters import DispensedItemTypeFilter, PlacementFilter, ConsumerFilter
 from navigation.admin import NavigableModelAdmin
 from app.models import *
+
 
 # Register your models here.
 class CallerAdmin(NavigableModelAdmin):
@@ -223,6 +225,7 @@ class HardwareAdmin(NavigableModelAdmin):
     list_display_links = list_display
     list_filter = [HardwareItemTypeFilter, PlacementFilter]
     search_fields = ['tag', 'last_assigned__location']
+    form = HardwareForm
     inlines = [SerialInline, PlacementInline]
 
     fieldsets = (
@@ -257,6 +260,7 @@ class SoftwareAdmin(NavigableModelAdmin):
     list_display = ['description', 'version']
     list_display_links = list_display
     list_filter = [SoftwareItemTypeFilter]
+    form = SoftwareForm
     inlines = [SerialInline, PlacementInline]
 
     fieldsets = (
