@@ -221,7 +221,7 @@ class HardwareAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_hardw'
 
     ordering = ('item_type', 'part_no', 'description')
-    list_display = ['tag', 'manufacturer', 'part_no', 'description', 'placement']
+    list_display = ['tag', 'manufacturer', 'part_no', 'description']
     list_display_links = list_display
     list_filter = [HardwareItemTypeFilter, PlacementFilter]
     search_fields = ['tag', 'last_assigned__location']
@@ -246,7 +246,7 @@ class HardwareAdmin(NavigableModelAdmin):
     
     def get_queryset(self, request):
         hardware = super(HardwareAdmin, self).get_queryset(request)
-        hardware = hardware.select_related("inventory", "item_type", "last_assigned", "producer")
+        hardware = hardware.select_related("item_type", "last_assigned", "producer")
 
         return hardware
 
@@ -275,7 +275,7 @@ class SoftwareAdmin(NavigableModelAdmin):
 
     def get_queryset(self, request):
         software = super(SoftwareAdmin, self).get_queryset(request)
-        software = software.select_related("inventory", "item_type", "last_assigned", "producer")
+        software = software.select_related("item_type", "producer")
 
         return software
 
