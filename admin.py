@@ -221,7 +221,7 @@ class HardwareAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_hardw'
 
     ordering = ('item_type', 'part_no', 'description')
-    list_display = ['tag', 'manufacturer', 'part_no', 'description']
+    list_display = ['tag', 'manufacturer', 'part_no', 'description', 'item_placement']
     list_display_links = list_display
     list_filter = [HardwareItemTypeFilter, PlacementFilter]
     search_fields = ['tag', 'last_assigned__location']
@@ -241,7 +241,9 @@ class HardwareAdmin(NavigableModelAdmin):
     def manufacturer(self, obj):
         return obj.producer.name
 
-    def placement(self, obj):
+    # Django 1.8 gets confused when this method is called "placement" and 
+    # triggers an exception claiming it does not exist.
+    def item_placement(self, obj):
         return obj.last_assigned.location
     
     def get_queryset(self, request):
