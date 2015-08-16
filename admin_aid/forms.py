@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 
 from django import forms
 from django.forms import widgets
-from django.contrib.admin.util import label_for_field
+from django.contrib.admin.utils import label_for_field
 from django.forms.forms import pretty_name
 
 from app.admin_aid.fields import NameLocationChoiceField, ItemTypeDescChoiceField, OrderItemOrderChoiceField
