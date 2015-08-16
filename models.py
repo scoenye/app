@@ -431,7 +431,7 @@ class HardwareLastAssigned(models.Model):
 
 
 class NonConsumable(models.Model):
-    support_item = models.ForeignKey(SupportItem, primary_key=True)
+    support_item = models.OneToOneField(SupportItem, primary_key=True)
     description = models.CharField(max_length=30, blank=True)
     item_type = models.ForeignKey(ItemType)
     item_type_name = models.CharField(max_length=40, blank=True)
