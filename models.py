@@ -196,6 +196,7 @@ class SupportItem(models.Model):
     description = models.CharField(max_length=30)
     producer    = models.ForeignKey(Company, default=-1)
     comment     = models.TextField(null=True, blank=True)
+    inventoried = models.DateField(blank=True, null=True)
 
     class Meta:
         db_table = 'support_item'

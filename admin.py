@@ -230,7 +230,7 @@ class HardwareAdmin(NavigableModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': (('tag', 'description'), ('producer', 'part_no'), 'item_type', 'comment', ('hostname', 'ip_address'))
+            'fields': (('tag', 'description'), ('producer', 'item_type', 'part_no'), 'comment', ('hostname', 'ip_address'), 'inventoried')
         }),
         ('Paperwork', {
             'classes': ('collapse', ),
