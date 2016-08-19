@@ -19,12 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 
 from django.contrib import admin
 
-from admin_aid.forms import OrderItemMaterialForm, OrderItemConsumableForm
-from admin_aid.forms import HelpdeskCallForm, DispenseForm
-from admin_aid.forms import HardwareForm, SoftwareForm
-from admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, ConsumableItemTypeFilter
-from admin_aid.filters import DispensedItemTypeFilter, PlacementFilter, ConsumerFilter
+from app.admin_aid.forms import OrderItemMaterialForm, OrderItemConsumableForm
+from app.admin_aid.forms import HelpdeskCallForm, DispenseForm
+from app.admin_aid.forms import HardwareForm, SoftwareForm
+from app.admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, ConsumableItemTypeFilter
+from app.admin_aid.filters import DispensedItemTypeFilter, PlacementFilter, ConsumerFilter
 from navigation.admin import NavigableModelAdmin
+
 from app.models import *
 
 
