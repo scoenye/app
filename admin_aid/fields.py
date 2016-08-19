@@ -17,11 +17,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/
 '''
 
+from __future__ import unicode_literals
+
 from django import forms
 
 # Attempt to get more control over the values displayed for
 # dropdown fields in inlines.
-from __future__ import unicode_literals
 
 class NameLocationChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
