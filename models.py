@@ -21,6 +21,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models import Q
+from django.utils.encoding import python_2_unicode_compatible
 
 
 class Caller(models.Model):
@@ -32,7 +33,8 @@ class Caller(models.Model):
     class Meta:
         db_table = 'caller'
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         if self.location is not None:
             return self.name + ' - ' + self.location
         else:
@@ -50,7 +52,8 @@ class Person(Caller):
     class Meta:
         db_table = 'person'
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
 class RepairTechnician(Person):
@@ -82,7 +85,8 @@ class Company(models.Model):
         db_table = 'company'
         verbose_name_plural = 'companies'
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
 class Contractor(Company):
@@ -97,7 +101,8 @@ class ItemType(models.Model):
     class Meta:
         db_table = 'item_type'
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
 class ConsumableItemType(ItemType):
@@ -138,7 +143,8 @@ class MaintenanceContract(models.Model):
     class Meta:
         db_table = 'maintenance_contract'
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.description
 
 # ---------------------------------------------------------------------
@@ -156,7 +162,8 @@ class MaterialOrder(models.Model):
     class Meta:
         db_table = 'material_order'
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.description
 
 # ---------------------------------------------------------------------
@@ -170,8 +177,9 @@ class OrderItem(models.Model):
     class Meta:
         db_table = 'order_item'
 
-    def __unicode__(self):
-        return unicode(self.description)
+    @python_2_unicode_compatible
+    def __str__(self):
+        return self.description
 
 
 class OrderItemConsumable(OrderItem):
@@ -201,8 +209,9 @@ class SupportItem(models.Model):
     class Meta:
         db_table = 'support_item'
 
-    def __unicode__(self):
-        return unicode(self.description)
+    @python_2_unicode_compatible
+    def __str__(self):
+        return self.description
 
 class Consumable(SupportItem):
     item_type = models.ForeignKey(ConsumableItemType)
@@ -243,8 +252,9 @@ class Placement(models.Model):
     class Meta:
         db_table = 'placement'
 
-    def __unicode__(self):
-        return unicode(self.location)
+    @python_2_unicode_compatible
+    def __str__(self):
+        return self.location
 
 class Dispensed(Placement):
     consumer = models.ForeignKey('Hardware')
@@ -270,7 +280,8 @@ class HelpdeskCall(models.Model):
     class Meta:
         db_table = 'helpdesk_call'
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.problem_type
 
 # ---------------------------------------------------------------------
@@ -289,7 +300,8 @@ class RepairCall(models.Model):
         db_table = 'repaircall'
         verbose_name_plural = "repair calls"
     
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.call_problem
 
 
@@ -301,8 +313,9 @@ class SerialNo(models.Model):
     class Meta:
         db_table = 'serial_no'
 
-    def __unicode__(self):
-        return unicode(self.serial_no)
+    @python_2_unicode_compatible
+    def __str__(self):
+        return self.serial_no
 
 class Weekday(models.Model):
     day = models.CharField(max_length=10)
@@ -445,5 +458,6 @@ class NonConsumable(models.Model):
         managed = False
         db_table = 'vw_nonconsumables'
 
-    def __unicode__(self):
-        return unicode(self.tag_ver) + ' - ' + unicode(self.item_type_name) + ' - ' + unicode(self.description)
+    @python_2_unicode_compatible
+    def __str__(self):
+        return self.tag_ver + ' - ' + self.item_type_name + ' - ' + self.description
