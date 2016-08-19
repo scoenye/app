@@ -21,14 +21,16 @@ from django import forms
 
 # Attempt to get more control over the values displayed for
 # dropdown fields in inlines.
+from __future__ import unicode_literals
+
 class NameLocationChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return unicode(obj.description) + ' - ' + unicode(obj.last_assigned.location)
+        return obj.description + ' - ' + obj.last_assigned.location
 
 class ItemTypeDescChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return unicode(obj.item_type.name) + ' - ' + unicode(obj.description)
+        return obj.item_type.name + ' - ' + obj.description
 
 class OrderItemOrderChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return unicode(obj.mat_order.order_no) + ' - ' + unicode(obj.description)
+        return obj.mat_order.order_no + ' - ' + obj.description
