@@ -63,7 +63,9 @@ class RepairTechnician(Person):
         db_table = 'repair_technician'
 
 class Employee(Person):
-    department = models.ForeignKey(Department)
+    # The name department clashes with a Django created reverse
+    # inheritance relationship field from Caller to Department.
+    work_department = models.ForeignKey(Department)
 
     class Meta:
         db_table = 'employee'
