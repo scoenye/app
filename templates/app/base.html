@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles navigation %}
 <!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -10,20 +10,7 @@
 
 <body>
 	<div id="header">
-		<div id="navigation">
-			{% for tier in navigation %}
-			<div class="NavigationTier">
-				<ul class="navbar">
-					{% for item in tier %}
-					<li class="navtab {{ item.is_selected }}">
-					<span class="navtab_left">&nbsp;</span><a href="{% url item.url %}">{{ item.name }}</a><span class="navtab_right">&nbsp;</span>
-					</li>
-					{% endfor %}
-				</ul>
-				<hr class="EndFloat">
-			</div>
-			{% endfor %}
-		</div>
+		{% nav_3tier navigation %}
   	</div>
 	
 	<div class="Content">
