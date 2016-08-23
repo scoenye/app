@@ -24,6 +24,9 @@ UL.navbar LI {
 #header {
 	color: #5b80b2;
 	background-color: #f8f8f8;
+	/* Counter Django 1.10 admin */
+	height: auto;
+	line-height: inherit;
 }
 
 #header a:link, #header a:visited {
