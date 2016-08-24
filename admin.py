@@ -107,7 +107,7 @@ class EmployeeAdmin(NavigableModelAdmin):
             'fields': (('first_name', 'name'), 'telephone', 'active')
         }),
         ('Workplace', {
-            'fields': ('department', 'location')
+            'fields': ('work_department', 'location')
         }),
     )
 
@@ -127,7 +127,7 @@ class TechnicianAdmin(NavigableModelAdmin):
             'fields': (('first_name', 'name'), 'telephone', 'active')
         }),
         ('Workplace', {
-            'fields': ('department', 'location')
+            'fields': ('work_department', 'location')
         }),
     )
 
