@@ -166,7 +166,8 @@ class MaterialOrder(models.Model):
 
     @python_2_unicode_compatible
     def __str__(self):
-        return self.description
+        # Return the first defined element out of the list.
+        return next(item for item in [self.description, self.comment, self.order_no] if item is not None)
 
 # ---------------------------------------------------------------------
 class OrderItem(models.Model):
@@ -256,7 +257,10 @@ class Placement(models.Model):
 
     @python_2_unicode_compatible
     def __str__(self):
-        return self.location
+        if self.location:
+            return self.location
+        else:
+            return str(self.place_date)
 
 class Dispensed(Placement):
     consumer = models.ForeignKey('Hardware')
@@ -462,4 +466,5 @@ class NonConsumable(models.Model):
 
     @python_2_unicode_compatible
     def __str__(self):
-        return self.tag_ver + ' - ' + self.item_type_name + ' - ' + self.description
+        # Filter out null strings to prevent a crash when __str__ is called.
+        return " - ".join(filter(None, [self.tag_ver, self.item_type_name, self.description]))
