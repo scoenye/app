@@ -1,4 +1,14 @@
 {% extends "admin/navigation/change_list.html" %}
 
+{% load i18n %}
+
+{% block welcome-msg %}
+    <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+{% endblock %}
+
+{% block userlinks %}
+    <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+{% endblock %}
+
 {% block branding %}{% endblock %}
 {% block breadcrumbs %}{% endblock %}
