@@ -64,8 +64,10 @@ class HardwareForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(HardwareForm, self).__init__(*args, **kwargs)
         if self.instance.item_type_id is not None:
-            self.fields['order_item'].queryset = OrderItemMaterial.objects.filter(
-                item_type=self.instance.item_type).select_related("mat_order", "hardware").order_by("-mat_order__order_no")
+            self.fields['order_item'].queryset = OrderItemMaterial.objects \
+                                                                  .filter(item_type=self.instance.item_type) \
+                                                                  .select_related("mat_order") \
+                                                                  .order_by("-mat_order__order_no")
     
     order_item = OrderItemOrderChoiceField(queryset = OrderItemMaterial.objects,
                                            required = False)
