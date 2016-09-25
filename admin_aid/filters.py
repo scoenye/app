@@ -88,6 +88,22 @@ class PlacementFilter(SimpleListFilter):
             return queryset.filter(last_assigned__department=self.value())
 
 
+class TerminalPlacementFilter(SimpleListFilter):
+    title = _('status')
+    
+    parameter_name = 'status'
+    
+    def lookups(self, request, model_admin):
+        return (
+            ('1', _('Decommissioned')), 
+            ('0', _('Active'))
+        )
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(last_assigned__department__end_of_life=self.value())
+
+
 class ConsumerFilter(SimpleListFilter):
     title = _('consumer')
     

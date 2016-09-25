@@ -25,7 +25,7 @@ from app.admin_aid.forms import OrderItemMaterialForm, OrderItemConsumableForm
 from app.admin_aid.forms import HelpdeskCallForm, DispenseForm
 from app.admin_aid.forms import HardwareForm, SoftwareForm
 from app.admin_aid.filters import HardwareItemTypeFilter, SoftwareItemTypeFilter, ConsumableItemTypeFilter
-from app.admin_aid.filters import DispensedItemTypeFilter, PlacementFilter, ConsumerFilter
+from app.admin_aid.filters import DispensedItemTypeFilter, PlacementFilter, TerminalPlacementFilter, ConsumerFilter
 from navigation.admin import NavigableModelAdmin
 
 from app.models import *
@@ -226,7 +226,7 @@ class HardwareAdmin(NavigableModelAdmin):
     ordering = ('item_type', 'part_no', 'description')
     list_display = ['tag', 'manufacturer', 'part_no', 'description', 'item_placement']
     list_display_links = list_display
-    list_filter = [HardwareItemTypeFilter, PlacementFilter]
+    list_filter = [HardwareItemTypeFilter, PlacementFilter, TerminalPlacementFilter]
     search_fields = ['tag', 'last_assigned__location']
     form = HardwareForm
     inlines = [SerialInline, PlacementInline]
