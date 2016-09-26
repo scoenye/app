@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/
 from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import CharField, Value
+from django.db.models.functions import Concat
 from django.contrib.admin import SimpleListFilter
 from app.models import Department, Hardware, HardwareItemType, SoftwareItemType, ConsumableItemType
 
@@ -78,10 +80,13 @@ class DispensedItemTypeFilter(SimpleListFilter):
 class PlacementFilter(SimpleListFilter):
     title = _('placement')
     
-    parameter_name = 'test'
+    parameter_name = 'placement'
 
     def lookups(self, request, model_admin):
-        return Department.objects.filter(active=True).order_by('name').values_list('id', 'name')
+        return Department.objects.filter(active=True) \
+                         .annotate(name_location=Concat('name', Value(' - '), 'location', output_field=CharField())) \
+                         .order_by('name') \
+                         .values_list('id', 'name_location')
 
     def queryset(self, request, queryset):
         if self.value():
