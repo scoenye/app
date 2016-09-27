@@ -39,6 +39,7 @@ class CallerAdmin(NavigableModelAdmin):
     list_filter = ['active']
     list_display = ['name', 'location']
     list_display_links = list_display
+    list_per_page = 25
     
 admin.site.register(Caller, CallerAdmin)
 
@@ -50,6 +51,7 @@ class DepartmentAdmin(NavigableModelAdmin):
     list_filter = ['active']
     list_display = ['name', 'location']
     list_display_links = list_display
+    list_per_page = 25
     
 admin.site.register(Department, DepartmentAdmin)
 
@@ -61,6 +63,7 @@ class PersonAdmin(NavigableModelAdmin):
     list_filter = ['active']
     list_display = ['name', 'first_name']
     list_display_links = list_display
+    list_per_page = 25
 
     fieldsets = (
         (None, {
@@ -81,6 +84,7 @@ class RepairTechnicianAdmin(NavigableModelAdmin):
     list_filter = ['active']
     list_display = ['name', 'first_name']
     list_display_links = list_display
+    list_per_page = 25
 
     fieldsets = (
         (None, {
@@ -101,6 +105,7 @@ class EmployeeAdmin(NavigableModelAdmin):
     list_filter = ['active']
     list_display = ['name', 'first_name']
     list_display_links = list_display
+    list_per_page = 25
 
     fieldsets = (
         (None, {
@@ -121,6 +126,7 @@ class TechnicianAdmin(NavigableModelAdmin):
     list_filter = ['active']
     list_display = ['name', 'first_name']
     list_display_links = list_display
+    list_per_page = 25
 
     fieldsets = (
         (None, {
@@ -136,14 +142,18 @@ admin.site.register(Technician, TechnicianAdmin)
 #------------------------------------------------------------------------------
 class CompanyAdmin(NavigableModelAdmin):
     nav_item = 'nav_company'
-    ordering = ('name',) 
+
+    ordering = ('name',)
+    list_per_page = 25 
     
 admin.site.register(Company, CompanyAdmin)
 
 
 class ContractorAdmin(NavigableModelAdmin):
     nav_item = 'nav_contractor'
+
     ordering = ('name',)
+    list_per_page = 25
 
 admin.site.register(Contractor, ContractorAdmin)
 
@@ -154,9 +164,11 @@ class WorkDoneInline(admin.TabularInline):
 
 class HelpdeskCallAdmin(NavigableModelAdmin):
     nav_item = 'nav_helpdesk'
+
     inlines = [WorkDoneInline]
     form = HelpdeskCallForm
-
+    list_per_page = 25
+   
     fieldsets = (
         (None, {
             'fields': (('caller', 'call_time', 'call_recorder'), 'problem_type', 'item')
@@ -175,6 +187,7 @@ admin.site.register(HelpdeskCall, HelpdeskCallAdmin)
 #------------------------------------------------------------------------------
 class ItemTypeAdmin(NavigableModelAdmin):
     nav_item = 'nav_inventory_type'
+
     ordering = ('name',)
     
 admin.site.register(ItemType, ItemTypeAdmin)
@@ -184,6 +197,7 @@ class HardwareItemTypeAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_type_hardw'
     
     ordering = ('name',)
+    list_per_page = 25
 
 admin.site.register(HardwareItemType, HardwareItemTypeAdmin)
 
@@ -192,6 +206,7 @@ class SoftwareItemTypeAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_type_softw'
     
     ordering = ('name',)
+    list_per_page = 25
 
 admin.site.register(SoftwareItemType, SoftwareItemTypeAdmin)
 
@@ -200,6 +215,7 @@ class ConsumableItemTypeAdmin(NavigableModelAdmin):
     nav_item = 'nav_inv_type_cons'
     
     ordering = ('name',)
+    list_per_page = 25
                 
 admin.site.register(ConsumableItemType, ConsumableItemTypeAdmin)
 
@@ -227,6 +243,7 @@ class HardwareAdmin(NavigableModelAdmin):
     list_display = ['tag', 'manufacturer', 'part_no', 'description', 'item_placement']
     list_display_links = list_display
     list_filter = [HardwareItemTypeFilter, PlacementFilter, TerminalPlacementFilter]
+    list_per_page = 50
     search_fields = ['tag', 'last_assigned__location']
     form = HardwareForm
     inlines = [SerialInline, PlacementInline]
@@ -265,6 +282,7 @@ class SoftwareAdmin(NavigableModelAdmin):
     list_display = ['description', 'version']
     list_display_links = list_display
     list_filter = [SoftwareItemTypeFilter]
+    list_per_page = 25
     form = SoftwareForm
     inlines = [SerialInline, PlacementInline]
 
@@ -294,6 +312,7 @@ class ConsumableAdmin(NavigableModelAdmin):
     list_display = ['item_type', 'part_no', 'description', 'on_hand']
     list_display_links = list_display
     list_filter = [ConsumableItemTypeFilter]
+    list_per_page = 25
     
     fieldsets = (
         (None, {
@@ -320,6 +339,7 @@ class DispensedAdmin(NavigableModelAdmin):
     ordering = ['-place_date']
     list_display = ['item_type', 'support_item', 'place_date', 'consumer', 'consumer_location']
     list_filter = [ConsumerFilter, DispensedItemTypeFilter]
+    list_per_page = 25
     
     def item_type(self, obj):
         return obj.support_item.consumable.item_type
@@ -343,7 +363,9 @@ class CoverPeriodInline(admin.TabularInline):
     
 class MaintenanceContractAdmin(NavigableModelAdmin):
     nav_item = 'nav_contract'
+
     inlines = [CoverPeriodInline,]
+    list_per_page = 25
     
 admin.site.register(MaintenanceContract, MaintenanceContractAdmin)
 
@@ -374,6 +396,7 @@ class MaterialOrderAdmin(NavigableModelAdmin):
     ordering = ['-order_date']
     list_display = ['order_no', 'description']
     list_display_links = list_display
+    list_per_page = 25
     inlines = [OrderItemMaterialInline, OrderItemConsumableInline]
 
     fieldsets = (
@@ -391,6 +414,8 @@ admin.site.register(MaterialOrder, MaterialOrderAdmin)
 #------------------------------------------------------------------------------
 class RepairCallAdmin(NavigableModelAdmin):
     nav_item = 'nav_repaircall'
+
+    list_per_page = 25
 
     fieldsets = (
         (None, {
