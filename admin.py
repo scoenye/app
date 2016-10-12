@@ -216,7 +216,7 @@ class ConsumableItemTypeAdmin(NavigableModelAdmin):
     
     ordering = ('name',)
     list_per_page = 25
-                
+
 admin.site.register(ConsumableItemType, ConsumableItemTypeAdmin)
 
 #------------------------------------------------------------------------------
@@ -316,7 +316,7 @@ class ConsumableAdmin(NavigableModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('description', ('producer', 'item_type'), 'comment')
+            'fields': (('description', 'part_no'), ('producer', 'item_type'), 'comment')
         }),
     )
     
